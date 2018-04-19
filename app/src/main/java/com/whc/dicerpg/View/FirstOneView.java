@@ -1,23 +1,42 @@
 package com.whc.dicerpg.View;
 
-import android.app.Activity;
+import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLU;
+
+import org.jbox2d.collision.AABB;
+import org.jbox2d.common.Vec2;
+import org.jbox2d.dynamics.World;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import static com.whc.dicerpg.View.Constant.OTHER_LOCATION;
+import static com.whc.dicerpg.View.Constant.TEXTUREID_OTHER;
+
 public class FirstOneView extends GLSurfaceView {
 
-    FirstOneView(Activity activity)
+
+    AABB worldAABB;
+    public MainActivity activity;
+    public SceneRenderer mRenderer;//場景渲染器
+    public World world;
+
+    FirstOneView(Context context)
     {
-        super(activity);
+        super(context);
+        this.activity=(MainActivity)context;
+        mRenderer = new SceneRenderer();	//創建場景渲染器
+        setRenderer(mRenderer);				//設置渲染器
+        setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);//設置渲染模式為主動渲染
+
     }
 
 
 
     public class SceneRenderer implements GLSurfaceView.Renderer{
-
+        public MyCommonTexture myBj;
+        public TextureRectangular trBj;
 
         @Override
         public void onDrawFrame(GL10 gl) {
@@ -42,13 +61,39 @@ public class FirstOneView extends GLSurfaceView {
                             0
                     );
 
+            //背景
+            myBj.drawself(gl, TEXTUREID_OTHER[0], From2DTo3DUtil.point3D(OTHER_LOCATION[0]), -10f);
+
 
         }
 
 
         @Override
         public void onSurfaceCreated(GL10 gl, EGLConfig config) {
+            //關閉抗抖動
+            gl.glDisable(GL10.GL_DITHER);
+            //設置特定Hint項目的模式，這裡為設置為使用快速模式
+            gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT,GL10.GL_FASTEST);
+            //設置屏幕背景色黑色RGBA
+            gl.glClearColor(0,0,0,0);
+            //開啟混合
+            gl.glEnable(GL10.GL_BLEND);
+            //設置混合參數
+            gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
+            //打開背面剪裁
+            gl.glEnable(GL10.GL_CULL_FACE);
+            //設置著色模型為平滑著色
+            gl.glShadeModel(GL10.GL_SMOOTH);//GL10.GL_SMOOTH  GL10.GL_FLAT
+            //啟用深度測試
+            gl.glEnable(GL10.GL_DEPTH_TEST);
 
+            //加載Bitmap
+            Constant.loadPic(FirstOneView.this.getResources());
+            //初始化紋理
+            Constant.loadTextureId(gl);
+
+            trBj=new TextureRectangular(Constant.OTHER_SIZE[2][0],Constant.OTHER_SIZE[2][1]);
+            loadGameData();
         }
 
         @Override
@@ -56,6 +101,33 @@ public class FirstOneView extends GLSurfaceView {
 
         }
 
+        public void loadGameData()
+        {
+            worldAABB = new AABB();
+            //上下界，以屏幕的左上方為 原點，如果創建的剛體到達屏幕的邊緣的話，會停止模擬
+            worldAABB.lowerBound.set(-100.0f,-100.0f);
+            worldAABB.upperBound.set(100.0f, 100.0f);//注意這裡使用的是現實世界的單位
+
+            Vec2 gravity = new Vec2(0.0f,30.0f);//設置重力
+            boolean doSleep = true;
+            //創建世界
+            world = new World(worldAABB,gravity, doSleep);
+            //創建邊界
+            MyEdgeImg myedgetemp=Box2DUtil.createMyEdgeImg
+                    (
+                            LOCATION[currStage][0][0],
+                            LOCATION[currStage][0][1],
+                            SIZE[currStage][0][0],
+                            SIZE[currStage][0][1],
+                            IS_MOVE[currStage][0],
+                            world,
+                            mRenderer.trZYbj,
+                            TEXTUREID_PIC[5],
+                            this
+                    );
+            mRenderer.myBj=new MyCommonTexture(mRenderer.trBj);
+
+        }
 
     }
 
