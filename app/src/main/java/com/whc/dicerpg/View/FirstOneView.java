@@ -13,6 +13,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 import static com.whc.dicerpg.View.Constant.OTHER_LOCATION;
 import static com.whc.dicerpg.View.Constant.TEXTUREID_OTHER;
+import static com.whc.dicerpg.View.Constant.*;
 
 public class FirstOneView extends GLSurfaceView {
 
@@ -22,14 +23,13 @@ public class FirstOneView extends GLSurfaceView {
     public SceneRenderer mRenderer;//場景渲染器
     public World world;
 
-    FirstOneView(Context context)
+    public FirstOneView(Context context)
     {
         super(context);
-        this.activity=(MainActivity)context;
+        this.activity=(MainActivity) context;
         mRenderer = new SceneRenderer();	//創建場景渲染器
         setRenderer(mRenderer);				//設置渲染器
         setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);//設置渲染模式為主動渲染
-
     }
 
 
@@ -37,6 +37,10 @@ public class FirstOneView extends GLSurfaceView {
     public class SceneRenderer implements GLSurfaceView.Renderer{
         public MyCommonTexture myBj;
         public TextureRectangular trBj;
+        public MyCommonTexture myRo;
+        public TextureRectangular trRo;
+        public MyCommonTexture myMo;
+        public TextureRectangular trMo;
 
         @Override
         public void onDrawFrame(GL10 gl) {
@@ -63,8 +67,8 @@ public class FirstOneView extends GLSurfaceView {
 
             //背景
             myBj.drawself(gl, TEXTUREID_OTHER[0], From2DTo3DUtil.point3D(OTHER_LOCATION[0]), -10f);
-
-
+            myRo.drawself(gl,TEXTUREID_OTHER[1],From2DTo3DUtil.point3D(OTHER_LOCATION[1]), -6f);
+            myMo.drawself(gl,TEXTUREID_OTHER[2],From2DTo3DUtil.point3D(OTHER_LOCATION[2]), -6f);
         }
 
 
@@ -91,14 +95,24 @@ public class FirstOneView extends GLSurfaceView {
             Constant.loadPic(FirstOneView.this.getResources());
             //初始化紋理
             Constant.loadTextureId(gl);
-
             trBj=new TextureRectangular(Constant.OTHER_SIZE[2][0],Constant.OTHER_SIZE[2][1]);
+            trRo=new TextureRectangular(OTHER_SIZE[0][0],OTHER_SIZE[0][1]);
+            trMo=new TextureRectangular(OTHER_SIZE[1][0],OTHER_SIZE[1][1]);
             loadGameData();
         }
 
         @Override
         public void onSurfaceChanged(GL10 gl, int width, int height) {
-
+            //設置視窗大小及位置
+            gl.glViewport(ssr.lucX,ssr.lucY, (int)(SCREEN_WIDTH_STANDARD*ssr.ratio), (int)(SCREEN_HEIGHT_STANDARD*ssr.ratio));
+            //設置當前矩陣為投影矩陣
+            gl.glMatrixMode(GL10.GL_PROJECTION);
+            //設置當前矩陣為單位矩陣
+            gl.glLoadIdentity();
+            //計算透視投影的比例
+            float ratio=RATIO;
+            //調用此方法計算產生透視投影矩陣
+            gl.glOrthof(-ratio, ratio, -1, 1, 1, 20);
         }
 
         public void loadGameData()
@@ -107,26 +121,13 @@ public class FirstOneView extends GLSurfaceView {
             //上下界，以屏幕的左上方為 原點，如果創建的剛體到達屏幕的邊緣的話，會停止模擬
             worldAABB.lowerBound.set(-100.0f,-100.0f);
             worldAABB.upperBound.set(100.0f, 100.0f);//注意這裡使用的是現實世界的單位
-
             Vec2 gravity = new Vec2(0.0f,30.0f);//設置重力
             boolean doSleep = true;
             //創建世界
             world = new World(worldAABB,gravity, doSleep);
-            //創建邊界
-            MyEdgeImg myedgetemp=Box2DUtil.createMyEdgeImg
-                    (
-                            LOCATION[currStage][0][0],
-                            LOCATION[currStage][0][1],
-                            SIZE[currStage][0][0],
-                            SIZE[currStage][0][1],
-                            IS_MOVE[currStage][0],
-                            world,
-                            mRenderer.trZYbj,
-                            TEXTUREID_PIC[5],
-                            this
-                    );
             mRenderer.myBj=new MyCommonTexture(mRenderer.trBj);
-
+            mRenderer.myRo=new MyCommonTexture(mRenderer.trRo);
+            mRenderer.myMo=new MyCommonTexture(mRenderer.trMo);
         }
 
     }

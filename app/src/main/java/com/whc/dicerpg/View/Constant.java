@@ -2,11 +2,10 @@ package com.whc.dicerpg.View;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.media.AudioManager;
 import android.opengl.GLUtils;
-
-import com.whc.dicerpg.R;
 import com.whc.dicerpg.Util.PicLoadUtil;
+import com.whc.dicerpg.Util.ScreenScaleResult;
+import com.whc.dicerpg.Util.ScreenScaleUtil;
 
 import javax.microedition.khronos.opengles.GL10;
 
@@ -15,9 +14,14 @@ public class Constant {
     public static int TEXTUREID_OTHER[];
     //其他圖面數組
     public static Bitmap[] OTHER_ARRAY;
-
+    public static float SCREEN_WIDTH_STANDARD=800;  //屏幕標準寬度
+    public static float SCREEN_HEIGHT_STANDARD=480;
     public static int SCREEN_WIDTH;  //屏幕寬度
     public static int SCREEN_HEIGHT; //屏幕高度
+    public static float RATIO=SCREEN_WIDTH_STANDARD/SCREEN_HEIGHT_STANDARD;//屏幕寬高比
+    public static boolean XSFLAG=false;//運行scaleCL()標誌位
+    //自適應屏幕工具類對象
+    public static ScreenScaleResult ssr;
 
     //加載紋理ID
     public static void loadTextureId(GL10 gl) {
@@ -27,27 +31,19 @@ public class Constant {
         }
     }
 
+    public static void scaleCL()
+    {
+        if(XSFLAG) return;
+        ssr= ScreenScaleUtil.calScale(SCREEN_WIDTH, SCREEN_HEIGHT);
+        XSFLAG=true;
+    }
+
     //其他貼圖尺寸
     public static float[][] OTHER_SIZE=
             {
-                    {40,40},		//0小球
-                    {112,56},		//1分數牌
+                    {64,64},		//0小球
+                    {64,64},		//1分數牌
                     {800,480},		//2背景
-                    {800,44},		//3天花板
-                    {64,64},		//4暫停/繼續
-                    {320,120},		//5GameOver
-                    {138,120},		//6女孩
-                    {56,64},		//7錢袋
-                    {128,44},		//8謎之盒
-                    {20,40},		//9白色數字
-                    {10,20},		//10黃色紫色數字
-                    {320,120},		//11繼續否
-                    {128,88},		//12滾動謎之盒
-                    {68,20},		//13lucky
-                    {100,140},		//14綠色數字
-                    {800,512},		//15煙花
-                    {16,16},		//16煙花炮彈
-                    {64,64}			//17煙花小
             };
 
     //加載遊戲界面圖片的方法
@@ -92,26 +88,16 @@ public class Constant {
     //遊戲界面其他圖片ID
     public static String[] OTHER_ID =
             {
-                   "ground.jpeg"                 //0背景
+                   "ground.jpeg",                 //0背景
+                    "man.png",                    //1主角
+                    "monster.jpeg"                 //2怪物
             };
 
     //其他物體位置
     public static float[][] OTHER_LOCATION =
             {
-                    {400, 240},                                        //0背景
-                    {56, 112}, {56, 172}, {56, 232}, {56, 292}, {56, 352},    //1~5分數牌
-                    {96, 442}, {720, 442},                                //6~7謎之盒
-                    {400, 22},                                        //8天花板
-                    {37, 37},                                        //9暫停/繼續
-                    {763, 34},                                        //10錢袋
-                    {719, 140},                                        //11女孩
-                    {400, 240},                                        //12繼續否
-                    {400, 240},                                        //13遊戲結束
-                    {500, 22}, {510, 22}, {520, 22},                        //14~16時間
-                    {200, 20}, {210, 20}, {220, 20},                        //17~19得分
-                    {560, 22}, {590, 22}, {620, 22}, {650, 22}, {680, 22},    //20~24遊戲幣
-                    {470, 250}, {490, 250}, {510, 250},                    //25~27得分
-                    {300, 240}, {400, 240}, {500, 240},                    //28~30抽獎信息
-                    {400, 240}                                        //31煙花
+                    {400, 240},   //0背景
+                    {100,400},    //man
+                    {700,400}
             };
 }
