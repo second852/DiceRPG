@@ -3,6 +3,8 @@ package com.whc.dicerpg.View;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.opengl.GLUtils;
+
+import com.whc.dicerpg.Model.FireAttack;
 import com.whc.dicerpg.Util.PicLoadUtil;
 import com.whc.dicerpg.Util.ScreenScaleResult;
 import com.whc.dicerpg.Util.ScreenScaleUtil;
@@ -13,6 +15,7 @@ public class Constant {
     //遊戲界面其他紋理ID數組
     public static int TEXTUREID_OTHER[];
     //其他圖面數組
+    public static final float RATE=10;//屏幕到現實世界的比例 10px:1m;
     public static Bitmap[] OTHER_ARRAY;
     public static float SCREEN_WIDTH_STANDARD=800;  //屏幕標準寬度
     public static float SCREEN_HEIGHT_STANDARD=480;
@@ -20,15 +23,34 @@ public class Constant {
     public static int SCREEN_HEIGHT; //屏幕高度
     public static float RATIO=SCREEN_WIDTH_STANDARD/SCREEN_HEIGHT_STANDARD;//屏幕寬高比
     public static boolean XSFLAG=false;//運行scaleCL()標誌位
+    public static boolean PHYSICS_THREAD_FLAG=false;//物理模擬線程工作標誌位
+    public static final float VELOCITY_THRESHOLD=8.0f;//小球是否靜止速度閾值
+    public static final float TIME_STEP=2f/60.0f;//模擬的的頻率
+    public static final int ITERA=10;//迭代越大，模擬約精確，但性能越低
+    public static final int SLEEPTIME=10;//休眠時間
+
+    public static final int BALL_Y=65;//小球下落位置y坐標
+    public static final int BALL_X_MIN=160;//小球最小下落位置x坐標
+    //剛體紋理ID數組
+    public static int TEXTUREID_PIC[];
     //自適應屏幕工具類對象
     public static ScreenScaleResult ssr;
-
+    //剛體的圖片數組
+    public static Bitmap[] PIC_ARRAY;
     //加載紋理ID
     public static void loadTextureId(GL10 gl) {
+
         TEXTUREID_OTHER = new int[OTHER_ARRAY.length];
         for (int i = 0; i < OTHER_ID.length; i++) {
             TEXTUREID_OTHER[i] = initTexture(gl, OTHER_ARRAY[i]);
         }
+
+        TEXTUREID_PIC=new int[PIC_ARRAY.length];
+        for(int i=0;i<PIC_ID.length;i++)
+        {
+            TEXTUREID_PIC[i]=initTexture(gl,PIC_ARRAY[i]);
+        }
+
     }
 
     public static void scaleCL()
@@ -52,6 +74,11 @@ public class Constant {
         OTHER_ARRAY = new Bitmap[OTHER_ID.length];
         for (int i = 0; i < OTHER_ID.length; i++) {
             OTHER_ARRAY[i] = PicLoadUtil.loadBM(res, OTHER_ID[i]);
+        }
+        PIC_ARRAY=new Bitmap[PIC_ID.length];
+        for(int i=0;i<PIC_ID.length;i++)
+        {
+            PIC_ARRAY[i]=PicLoadUtil.loadBM(res, PIC_ID[i]);
         }
     }
 
@@ -84,13 +111,19 @@ public class Constant {
         return textureId;              //返迴紋理ID
     }
 
+    //剛體圖片ID
+    public static String[] PIC_ID=
+            {
+                    "fire.png",				//0火球
+                    "fire-collide.png"      //1碰撞火球
+            };
 
     //遊戲界面其他圖片ID
     public static String[] OTHER_ID =
             {
                    "ground.jpeg",                 //0背景
                     "man.png",                    //1主角
-                    "monster.jpeg"                 //2怪物
+                    "monster.jpeg"                //2怪物
             };
 
     //其他物體位置

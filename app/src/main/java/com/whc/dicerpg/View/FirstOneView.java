@@ -4,9 +4,14 @@ import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLU;
 
+import com.whc.dicerpg.Model.FireAttack;
+import com.whc.dicerpg.Model.MyBody;
+
 import org.jbox2d.collision.AABB;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.World;
+
+import java.util.ArrayList;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -22,6 +27,10 @@ public class FirstOneView extends GLSurfaceView {
     public MainActivity activity;
     public SceneRenderer mRenderer;//場景渲染器
     public World world;
+    public FireAttack FA;
+    public float xst=BALL_X_MIN;//火球位置x
+    public float yst=BALL_Y;//火球位置y
+    public ArrayList<MyBody> bl=new ArrayList<MyBody>();//剛體列表
 
     public FirstOneView(Context context)
     {
@@ -41,6 +50,8 @@ public class FirstOneView extends GLSurfaceView {
         public TextureRectangular trRo;
         public MyCommonTexture myMo;
         public TextureRectangular trMo;
+
+        public TextureRectangular trXq;
 
         @Override
         public void onDrawFrame(GL10 gl) {
@@ -98,6 +109,7 @@ public class FirstOneView extends GLSurfaceView {
             trBj=new TextureRectangular(Constant.OTHER_SIZE[2][0],Constant.OTHER_SIZE[2][1]);
             trRo=new TextureRectangular(OTHER_SIZE[0][0],OTHER_SIZE[0][1]);
             trMo=new TextureRectangular(OTHER_SIZE[1][0],OTHER_SIZE[1][1]);
+            trXq=new TextureRectangular(OTHER_SIZE[0][0],OTHER_SIZE[0][1]);
             loadGameData();
         }
 
