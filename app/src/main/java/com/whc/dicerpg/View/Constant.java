@@ -23,7 +23,7 @@ public class Constant {
     public static int SCREEN_HEIGHT; //屏幕高度
     public static float RATIO=SCREEN_WIDTH_STANDARD/SCREEN_HEIGHT_STANDARD;//屏幕寬高比
     public static boolean XSFLAG=false;//運行scaleCL()標誌位
-    public static boolean PHYSICS_THREAD_FLAG=false;//物理模擬線程工作標誌位
+    public static boolean PHYSICS_THREAD_FLAG=true;//物理模擬線程工作標誌位
     public static final float VELOCITY_THRESHOLD=8.0f;//小球是否靜止速度閾值
     public static final float TIME_STEP=2f/60.0f;//模擬的的頻率
     public static final int ITERA=10;//迭代越大，模擬約精確，但性能越低

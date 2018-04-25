@@ -1,6 +1,7 @@
 package com.whc.dicerpg.Thread;
 
 import android.graphics.Bitmap;
+import android.util.Log;
 
 import com.whc.dicerpg.Model.FireAttack;
 import com.whc.dicerpg.Util.Box2DUtil;
@@ -9,6 +10,9 @@ import com.whc.dicerpg.View.FirstOneView;
 import com.whc.dicerpg.View.Constant.*;
 
 import org.jbox2d.common.Vec2;
+import org.jbox2d.dynamics.ContactListener;
+import org.jbox2d.dynamics.contacts.ContactPoint;
+import org.jbox2d.dynamics.contacts.ContactResult;
 
 import static com.whc.dicerpg.View.Constant.ITERA;
 import static com.whc.dicerpg.View.Constant.PHYSICS_THREAD_FLAG;
@@ -36,7 +40,7 @@ public class PhysicsThread extends Thread {
     @Override
     public void run()
     {
-           if(PHYSICS_THREAD_FLAG)
+           while (PHYSICS_THREAD_FLAG)
            {
 
                fo.world.step(TIME_STEP,ITERA);
@@ -53,65 +57,18 @@ public class PhysicsThread extends Thread {
                    isStatic=false;
                    judgeStatic=true;
                }
-
-               //火焰消失條件
-               if(judgeStatic&&fo.FA.body.getLinearVelocity().lengthSquared()<VELOCITY_THRESHOLD&&fo.FA.body.getPosition().y*RATE>443)//判斷小球是否靜止
-               {
-                   float x=fo.FA.body.getPosition().x*RATE;
-                   float y=fo.FA.body.getPosition().y*RATE;
-                   changeState(x,y);
-                   detectionBlood();
-                   isStatic=true;
-                   judgeStatic=false;
-               }
-
-
            }
 
     }
 
-    private void changeState(float x, float y) {
-        fo.world.destroyBody(fo.FA.body);
-        fo.FA.isLive=false;
-        Bitmap[] bma=new Bitmap[1];
-        bma[0]=PIC_ARRAY[1];
-        FireAttack sb=Box2DUtil.createFireAttack
-                (
-                        x,
-                        y,
-                        OTHER_SIZE[0][0]/2,
-                        true,
-                        fo.world,
-                        fo.mRenderer.trXq,
-                        TEXTUREID_PIC[2],
-                        fo
-                );
-        gv.staticball.add(sb);
 
-        for(int i=0;i<BALL_LINE.length;i++)
-        {
-            if(x>BALL_BOUNDARY[currStage][i][0]&&x<BALL_BOUNDARY[currStage][i][1])
-            {
-                BALL_LINE[i]=1;
-            }
-        }
-        for(int i:BALL_LINE)
-        {
-            System.out.print(i+" ");
-        }
-        System.out.println();
-    }
-
-    private void detectionBlood() {
-        
-    }
 
     private void doAddtask() {
         Bitmap[] bma=new Bitmap[1];
         bma[0]=PIC_ARRAY[1];
         fo.FA= Box2DUtil.createFireAttack(
-                fo.xst,
-                fo.yst,
+                OTHER_LOCATION[1][0],
+                OTHER_LOCATION[1][1],
                 Constant.OTHER_SIZE[0][0]/2,
                 false,
                 fo.world,
@@ -119,9 +76,8 @@ public class PhysicsThread extends Thread {
                 TEXTUREID_PIC[0],
                 fo
         );
-        fo.FA.body.setLinearVelocity(new Vec2(0,10));
+        fo.FA.body.setLinearVelocity(new Vec2(5,0));
         fo.bl.add(fo.FA);
     }
-
 
 }

@@ -3,13 +3,21 @@ package com.whc.dicerpg.View;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLU;
+import android.view.MotionEvent;
 
 import com.whc.dicerpg.Model.FireAttack;
+import com.whc.dicerpg.Model.Monster;
 import com.whc.dicerpg.Model.MyBody;
+import com.whc.dicerpg.Thread.PhysicsThread;
+import com.whc.dicerpg.Util.Box2DUtil;
 
 import org.jbox2d.collision.AABB;
 import org.jbox2d.common.Vec2;
+import org.jbox2d.dynamics.Body;
+import org.jbox2d.dynamics.ContactListener;
 import org.jbox2d.dynamics.World;
+import org.jbox2d.dynamics.contacts.ContactPoint;
+import org.jbox2d.dynamics.contacts.ContactResult;
 
 import java.util.ArrayList;
 
@@ -31,6 +39,8 @@ public class FirstOneView extends GLSurfaceView {
     public float xst=BALL_X_MIN;//火球位置x
     public float yst=BALL_Y;//火球位置y
     public ArrayList<MyBody> bl=new ArrayList<MyBody>();//剛體列表
+    public PhysicsThread pt;//物理模擬線程
+
 
     public FirstOneView(Context context)
     {
@@ -41,7 +51,15 @@ public class FirstOneView extends GLSurfaceView {
         setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);//設置渲染模式為主動渲染
     }
 
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
 
+        if(event.getAction()==MotionEvent.ACTION_DOWN)
+        {
+           pt.addTask=true;
+        }
+        return true;
+    }
 
     public class SceneRenderer implements GLSurfaceView.Renderer{
         public MyCommonTexture myBj;
@@ -50,8 +68,8 @@ public class FirstOneView extends GLSurfaceView {
         public TextureRectangular trRo;
         public MyCommonTexture myMo;
         public TextureRectangular trMo;
-
         public TextureRectangular trXq;
+
 
         @Override
         public void onDrawFrame(GL10 gl) {
@@ -79,7 +97,20 @@ public class FirstOneView extends GLSurfaceView {
             //背景
             myBj.drawself(gl, TEXTUREID_OTHER[0], From2DTo3DUtil.point3D(OTHER_LOCATION[0]), -10f);
             myRo.drawself(gl,TEXTUREID_OTHER[1],From2DTo3DUtil.point3D(OTHER_LOCATION[1]), -6f);
-            myMo.drawself(gl,TEXTUREID_OTHER[2],From2DTo3DUtil.point3D(OTHER_LOCATION[2]), -6f);
+            //剛體
+            int size_bl=bl.size();
+            for(int i=0;i<size_bl;i++)
+            {
+                try
+                {
+                    bl.get(i).drawSelf(gl);
+                }
+                catch(Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }
+
         }
 
 
@@ -110,7 +141,14 @@ public class FirstOneView extends GLSurfaceView {
             trRo=new TextureRectangular(OTHER_SIZE[0][0],OTHER_SIZE[0][1]);
             trMo=new TextureRectangular(OTHER_SIZE[1][0],OTHER_SIZE[1][1]);
             trXq=new TextureRectangular(OTHER_SIZE[0][0],OTHER_SIZE[0][1]);
+
             loadGameData();
+
+            initContactListener();
+
+            pt=new PhysicsThread(FirstOneView.this);
+            pt.start();
+
         }
 
         @Override
@@ -137,9 +175,76 @@ public class FirstOneView extends GLSurfaceView {
             boolean doSleep = true;
             //創建世界
             world = new World(worldAABB,gravity, doSleep);
+
+            Monster monster= Box2DUtil.createMonster(
+                    OTHER_LOCATION[2][0],
+                    OTHER_LOCATION[2][1],
+                    OTHER_SIZE[0][0],
+                    true,
+                    world,
+                    mRenderer.trMo,
+                    TEXTUREID_OTHER[2],
+                    FirstOneView.this
+            );
+            bl.add(monster);
             mRenderer.myBj=new MyCommonTexture(mRenderer.trBj);
             mRenderer.myRo=new MyCommonTexture(mRenderer.trRo);
             mRenderer.myMo=new MyCommonTexture(mRenderer.trMo);
+
+        }
+
+        //加載碰撞監聽器
+        public void initContactListener()
+        {
+            ContactListener cl=new ContactListener()
+            {
+                @Override
+                public void add(ContactPoint arg0)
+                {
+                    Body body1=arg0.shape1.getBody();
+                    Body body2=arg0.shape2.getBody();
+                    float x=arg0.position.x*RATIO;
+                    float y=arg0.position.y*RATIO;
+                    if(FirstOneView.this.FA==null)
+                    {
+                        return;
+                    }
+                    for (MyBody b:bl)
+                    {
+                       if(b instanceof Monster)
+                       {
+                           Monster m= (Monster) b;
+                           if(body1==m.body||body2==m.body)
+                           {
+                                 m.doAction(x,y);
+                           }
+                       }
+                        if(b instanceof FireAttack)
+                        {
+                            FireAttack f= (FireAttack) b;
+                            if(body1==f.body||body2==f.body)
+                            {
+                                f.doAction(x,y);
+                            }
+                        }
+                    }
+
+
+                }
+
+                @Override
+                public void persist(ContactPoint arg0) {
+                }
+
+                @Override
+                public void remove(ContactPoint arg0) {
+                }
+
+                @Override
+                public void result(ContactResult arg0) {
+                }
+            };
+            world.setContactListener(cl);
         }
 
     }
