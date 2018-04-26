@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.util.Log;
 
 import com.whc.dicerpg.Model.FireAttack;
+import com.whc.dicerpg.Model.MyBody;
 import com.whc.dicerpg.Util.Box2DUtil;
 import com.whc.dicerpg.View.Constant;
 import com.whc.dicerpg.View.FirstOneView;
@@ -43,7 +44,15 @@ public class PhysicsThread extends Thread {
            while (PHYSICS_THREAD_FLAG)
            {
 
-               fo.world.step(TIME_STEP,ITERA);
+               try
+               {
+                   fo.world.step(TIME_STEP,ITERA);//開始模擬
+               }
+               catch(Exception e)
+               {
+                   e.printStackTrace();
+               }
+
                try {
                    Thread.sleep(SLEEPTIME);
                } catch (InterruptedException e) {
@@ -57,15 +66,76 @@ public class PhysicsThread extends Thread {
                    isStatic=false;
                    judgeStatic=true;
                }
-           }
+               if(fo.FA!=null)
+               {
+                   Log.d("physic",judgeStatic+" : "+fo.FA.body.getPosition().x+" : "+VELOCITY_THRESHOLD+" : "+fo.FA.body.getPosition().y*RATE);
+               }
 
+               //小球靜止判斷條件
+               if(judgeStatic&&fo.FA.body.getLinearVelocity().x==-3&&fo.FA.body.getPosition().x<63)//判斷小球是否靜止
+               {
+                   fo.FA.body.getLinearVelocity().setZero();
+                   Log.d("physic","stop");
+                   float x=fo.FA.body.getPosition().x*RATE;
+                   float y=fo.FA.body.getPosition().y*RATE;
+                   changeState(x,y);
+                   isStatic=true;
+                   judgeStatic=false;
+               }
+               //擊中火球
+               for(MyBody mb:fo.b2)
+               {
+                   if(mb instanceof FireAttack)
+                   {
+
+                       FireAttack fa= (FireAttack) mb;
+                       if(!fa.isLive)
+                       {
+                           try {
+                               Thread.sleep(20);
+                           }catch (Exception e)
+                           {
+                               e.printStackTrace();
+                           }
+                           fo.world.destroyBody(fa.body);
+                           fo.b2.clear();
+                       }
+                   }
+               }
+//
+               for(int i=0;i<fo.bl.size();i++)
+               {
+                   if(fo.bl.get(i) instanceof FireAttack)
+                   {
+                      FireAttack fa= (FireAttack) fo.bl.get(i);
+                      if(!fa.isLive)
+                      {
+                          fo.bl.remove(i);
+                      }
+                   }
+               }
+           }
+    }
+
+    private void changeState(float x, float y) {
+        fo.FA.isLive=false;
+        fo.world.destroyBody(fo.FA.body);
+        FireAttack sb=Box2DUtil.createFireAttack
+                (
+                        x,
+                        y,
+                        OTHER_SIZE[0][0]/2,
+                        true,
+                        fo.world,
+                        fo.mRenderer.trXq,
+                        TEXTUREID_PIC[1],
+                        fo
+                );
+        fo.b2.add(sb);
     }
 
 
-
     private void doAddtask() {
-        Bitmap[] bma=new Bitmap[1];
-        bma[0]=PIC_ARRAY[1];
         fo.FA= Box2DUtil.createFireAttack(
                 OTHER_LOCATION[1][0],
                 OTHER_LOCATION[1][1],
@@ -76,7 +146,7 @@ public class PhysicsThread extends Thread {
                 TEXTUREID_PIC[0],
                 fo
         );
-        fo.FA.body.setLinearVelocity(new Vec2(5,0));
+        fo.FA.body.setLinearVelocity(new Vec2(10,0));
         fo.bl.add(fo.FA);
     }
 

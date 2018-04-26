@@ -3,6 +3,7 @@ package com.whc.dicerpg.View;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLU;
+import android.util.Log;
 import android.view.MotionEvent;
 
 import com.whc.dicerpg.Model.FireAttack;
@@ -39,6 +40,7 @@ public class FirstOneView extends GLSurfaceView {
     public float xst=BALL_X_MIN;//火球位置x
     public float yst=BALL_Y;//火球位置y
     public ArrayList<MyBody> bl=new ArrayList<MyBody>();//剛體列表
+    public ArrayList<MyBody> b2=new ArrayList<MyBody>();//剛體列表
     public PhysicsThread pt;//物理模擬線程
 
 
@@ -110,7 +112,24 @@ public class FirstOneView extends GLSurfaceView {
                     e.printStackTrace();
                 }
             }
+            //剛體
+            for(int i=0;i<b2.size();i++)
+            {
+                try
+                {
 
+                    b2.get(i).drawSelf(gl);
+                    if(b2.get(i) instanceof FireAttack)
+                    {
+                        FireAttack fa= (FireAttack) b2.get(i);
+                        fa.isLive=false;
+                    }
+                }
+                catch(Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }
         }
 
 
@@ -171,7 +190,7 @@ public class FirstOneView extends GLSurfaceView {
             //上下界，以屏幕的左上方為 原點，如果創建的剛體到達屏幕的邊緣的話，會停止模擬
             worldAABB.lowerBound.set(-100.0f,-100.0f);
             worldAABB.upperBound.set(100.0f, 100.0f);//注意這裡使用的是現實世界的單位
-            Vec2 gravity = new Vec2(0.0f,30.0f);//設置重力
+            Vec2 gravity = new Vec2(0.0f,0.0f);//設置重力
             boolean doSleep = true;
             //創建世界
             world = new World(worldAABB,gravity, doSleep);
@@ -179,7 +198,8 @@ public class FirstOneView extends GLSurfaceView {
             Monster monster= Box2DUtil.createMonster(
                     OTHER_LOCATION[2][0],
                     OTHER_LOCATION[2][1],
-                    OTHER_SIZE[0][0],
+                    OTHER_SIZE[1][0],
+                    OTHER_SIZE[1][1],
                     true,
                     world,
                     mRenderer.trMo,
@@ -190,7 +210,6 @@ public class FirstOneView extends GLSurfaceView {
             mRenderer.myBj=new MyCommonTexture(mRenderer.trBj);
             mRenderer.myRo=new MyCommonTexture(mRenderer.trRo);
             mRenderer.myMo=new MyCommonTexture(mRenderer.trMo);
-
         }
 
         //加載碰撞監聽器

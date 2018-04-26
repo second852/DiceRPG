@@ -14,14 +14,16 @@ public class Monster extends MyBody {
 
 
     public Body body;
-    float radius;
+    public float width;
+    public float height;
     int textureid;
     TextureRectangular tr;
     FirstOneView fo;
 
-    public Monster(Body body, float radius, int textureid, TextureRectangular tr, FirstOneView fo) {
+    public Monster(Body body, float width, float height, int textureid, TextureRectangular tr, FirstOneView fo) {
         this.body = body;
-        this.radius = radius;
+        this.width = width;
+        this.height = height;
         this.textureid = textureid;
         this.tr = tr;
         this.fo = fo;
@@ -36,7 +38,7 @@ public class Monster extends MyBody {
         gl.glPushMatrix();
 
         gl.glTranslatef(point[0], point[1], 0);
-        tr.drawSelf(gl,textureid,-8f);
+        tr.drawSelf(gl,textureid,-6f);
         gl.glPopMatrix();
     }
 
