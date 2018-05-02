@@ -122,7 +122,7 @@ public class Constant {
     public static String[] OTHER_ID =
             {
                    "ground.jpeg",                 //0背景
-                    "man.png",                    //1主角
+                    "man1.png",                    //1主角
                     "monster.jpeg"                //2怪物
             };
 
