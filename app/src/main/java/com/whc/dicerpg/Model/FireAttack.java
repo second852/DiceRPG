@@ -7,14 +7,11 @@ import com.whc.dicerpg.View.From2DTo3DUtil;
 import com.whc.dicerpg.View.TextureRectangular;
 
 import org.jbox2d.dynamics.Body;
-
 import javax.microedition.khronos.opengles.GL10;
-
-import static com.whc.dicerpg.View.Constant.OTHER_LOCATION;
 import static com.whc.dicerpg.View.Constant.RATE;
-import static com.whc.dicerpg.View.Constant.TEXTUREID_PIC;
 
-public class FireAttack extends MyBody {
+
+public class FireAttack implements MyBody {
 
     public Body body;
     float radius;

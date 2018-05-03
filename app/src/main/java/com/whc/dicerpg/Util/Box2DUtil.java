@@ -1,8 +1,7 @@
 package com.whc.dicerpg.Util;
 
 import com.whc.dicerpg.Model.FireAttack;
-import com.whc.dicerpg.Model.Monster;
-import com.whc.dicerpg.View.Constant;
+import com.whc.dicerpg.Model.Dragon;
 import com.whc.dicerpg.View.FirstOneView;
 import com.whc.dicerpg.View.TextureRectangular;
 import org.jbox2d.collision.CircleDef;
@@ -63,7 +62,7 @@ public class Box2DUtil {
     }
 
 
-    public static Monster createMonster
+    public static Dragon createMonster
             (
                     float x,//x坐標
                     float y,//y坐標
@@ -101,6 +100,6 @@ public class Box2DUtil {
         //指定剛體形狀
         bodyTemp.createShape(shape);
         bodyTemp.setMassFromShapes();
-        return new Monster(bodyTemp,width,height,textureid,tr,fo);
+        return new Dragon(bodyTemp,width,height,textureid,tr,fo);
     }
 }

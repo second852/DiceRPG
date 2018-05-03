@@ -10,7 +10,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 import static com.whc.dicerpg.View.Constant.RATE;
 
-public class Monster extends MyBody {
+public class MagicGril implements MyBody{
 
 
     public Body body;
@@ -20,7 +20,7 @@ public class Monster extends MyBody {
     TextureRectangular tr;
     FirstOneView fo;
 
-    public Monster(Body body, float width, float height, int textureid, TextureRectangular tr, FirstOneView fo) {
+    public MagicGril(Body body, float width, float height, int textureid, TextureRectangular tr, FirstOneView fo) {
         this.body = body;
         this.width = width;
         this.height = height;
@@ -36,7 +36,6 @@ public class Monster extends MyBody {
         float point[]={x,y};
         point= From2DTo3DUtil.point3D(point);
         gl.glPushMatrix();
-
         gl.glTranslatef(point[0], point[1], 0);
         tr.drawSelf(gl,textureid,-6f);
         gl.glPopMatrix();

@@ -3,18 +3,13 @@ package com.whc.dicerpg.View;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLU;
-import android.util.Log;
 import android.view.MotionEvent;
 
 import com.whc.dicerpg.Model.FireAttack;
-import com.whc.dicerpg.Model.Monster;
 import com.whc.dicerpg.Model.MyBody;
 import com.whc.dicerpg.Thread.PhysicsThread;
-import com.whc.dicerpg.Util.Box2DUtil;
-
 import org.jbox2d.collision.AABB;
 import org.jbox2d.common.Vec2;
-import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.ContactListener;
 import org.jbox2d.dynamics.World;
 import org.jbox2d.dynamics.contacts.ContactPoint;
@@ -24,9 +19,6 @@ import java.util.ArrayList;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
-
-import static com.whc.dicerpg.View.Constant.OTHER_LOCATION;
-import static com.whc.dicerpg.View.Constant.TEXTUREID_OTHER;
 import static com.whc.dicerpg.View.Constant.*;
 
 public class FirstOneView extends GLSurfaceView {
@@ -37,8 +29,6 @@ public class FirstOneView extends GLSurfaceView {
     public SceneRenderer mRenderer;//場景渲染器
     public World world;
     public FireAttack FA;
-    public float xst=BALL_X_MIN;//火球位置x
-    public float yst=BALL_Y;//火球位置y
     public ArrayList<MyBody> bl=new ArrayList<MyBody>();//剛體列表
     public ArrayList<MyBody> b2=new ArrayList<MyBody>();//剛體列表
     public PhysicsThread pt;//物理模擬線程
@@ -56,16 +46,15 @@ public class FirstOneView extends GLSurfaceView {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
 
-        if(event.getAction()==MotionEvent.ACTION_DOWN)
-        {
-           pt.addTask=true;
-        }
+
         return true;
     }
 
     public class SceneRenderer implements GLSurfaceView.Renderer{
+        //背景
         public MyCommonTexture myBj;
         public TextureRectangular trBj;
+
         public MyCommonTexture myRo;
         public TextureRectangular trRo;
         public MyCommonTexture myMo;
@@ -97,39 +86,9 @@ public class FirstOneView extends GLSurfaceView {
                     );
 
             //背景
-            myBj.drawself(gl, TEXTUREID_OTHER[0], From2DTo3DUtil.point3D(OTHER_LOCATION[0]), -10f);
-            myRo.drawself(gl,TEXTUREID_OTHER[1],From2DTo3DUtil.point3D(OTHER_LOCATION[1]), -6f);
-            //剛體
-            int size_bl=bl.size();
-            for(int i=0;i<size_bl;i++)
-            {
-                try
-                {
-                    bl.get(i).drawSelf(gl);
-                }
-                catch(Exception e)
-                {
-                    e.printStackTrace();
-                }
-            }
-            //剛體
-            for(int i=0;i<b2.size();i++)
-            {
-                try
-                {
+            myBj.drawself(gl, BackGroup_PIC[0], From2DTo3DUtil.point3D(Object_Location[0]), -10f);
 
-                    b2.get(i).drawSelf(gl);
-                    if(b2.get(i) instanceof FireAttack)
-                    {
-                        FireAttack fa= (FireAttack) b2.get(i);
-                        fa.isLive=false;
-                    }
-                }
-                catch(Exception e)
-                {
-                    e.printStackTrace();
-                }
-            }
+
         }
 
 
@@ -156,17 +115,9 @@ public class FirstOneView extends GLSurfaceView {
             Constant.loadPic(FirstOneView.this.getResources());
             //初始化紋理
             Constant.loadTextureId(gl);
-            trBj=new TextureRectangular(Constant.OTHER_SIZE[2][0],Constant.OTHER_SIZE[2][1]);
-            trRo=new TextureRectangular(OTHER_SIZE[0][0],OTHER_SIZE[0][1]);
-            trMo=new TextureRectangular(OTHER_SIZE[1][0],OTHER_SIZE[1][1]);
-            trXq=new TextureRectangular(OTHER_SIZE[0][0],OTHER_SIZE[0][1]);
-
+            trBj=new TextureRectangular(Object_Size[0][0],Object_Size[0][1]);
             loadGameData();
-
             initContactListener();
-
-            pt=new PhysicsThread(FirstOneView.this);
-            pt.start();
 
         }
 
@@ -184,6 +135,7 @@ public class FirstOneView extends GLSurfaceView {
             gl.glOrthof(-ratio, ratio, -1, 1, 1, 20);
         }
 
+
         public void loadGameData()
         {
             worldAABB = new AABB();
@@ -194,22 +146,7 @@ public class FirstOneView extends GLSurfaceView {
             boolean doSleep = true;
             //創建世界
             world = new World(worldAABB,gravity, doSleep);
-
-            Monster monster= Box2DUtil.createMonster(
-                    OTHER_LOCATION[2][0],
-                    OTHER_LOCATION[2][1],
-                    OTHER_SIZE[1][0],
-                    OTHER_SIZE[1][1],
-                    true,
-                    world,
-                    mRenderer.trMo,
-                    TEXTUREID_OTHER[2],
-                    FirstOneView.this
-            );
-            bl.add(monster);
             mRenderer.myBj=new MyCommonTexture(mRenderer.trBj);
-            mRenderer.myRo=new MyCommonTexture(mRenderer.trRo);
-            mRenderer.myMo=new MyCommonTexture(mRenderer.trMo);
         }
 
         //加載碰撞監聽器
@@ -220,34 +157,6 @@ public class FirstOneView extends GLSurfaceView {
                 @Override
                 public void add(ContactPoint arg0)
                 {
-                    Body body1=arg0.shape1.getBody();
-                    Body body2=arg0.shape2.getBody();
-                    float x=arg0.position.x*RATIO;
-                    float y=arg0.position.y*RATIO;
-                    if(FirstOneView.this.FA==null)
-                    {
-                        return;
-                    }
-                    for (MyBody b:bl)
-                    {
-                       if(b instanceof Monster)
-                       {
-                           Monster m= (Monster) b;
-                           if(body1==m.body||body2==m.body)
-                           {
-                                 m.doAction(x,y);
-                           }
-                       }
-                        if(b instanceof FireAttack)
-                        {
-                            FireAttack f= (FireAttack) b;
-                            if(body1==f.body||body2==f.body)
-                            {
-                                f.doAction(x,y);
-                            }
-                        }
-                    }
-
 
                 }
 
