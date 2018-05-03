@@ -257,7 +257,7 @@ public class Constant {
 
     //Dragon的圖片ID
     public static String[] Dragon_PIC_ID() {
-        int length=1;
+        int length=12;
         String[] s = new String[length];
         for (int i = 0; i < length; i++) {
             s[i] = "Dragon" + i + ".png";
@@ -266,12 +266,13 @@ public class Constant {
     }
 
     public static float[][] Object_Size={
-            {800,480}//背景
+            {800,420}//背景
 
     };
 
+
     public static float[][] Object_Location={
-            {400,240}//背景
+            {400,200}//背景
 
     };
 

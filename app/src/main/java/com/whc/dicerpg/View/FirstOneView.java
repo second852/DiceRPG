@@ -118,7 +118,6 @@ public class FirstOneView extends GLSurfaceView {
             trBj=new TextureRectangular(Object_Size[0][0],Object_Size[0][1]);
             loadGameData();
             initContactListener();
-
         }
 
         @Override
