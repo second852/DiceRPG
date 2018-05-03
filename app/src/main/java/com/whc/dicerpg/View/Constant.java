@@ -121,7 +121,6 @@ public class Constant {
         SwordBoy_PIC_B = new Bitmap[SwordBoy_PIC_ID().length];
         for (int i = 0; i < SwordBoy_PIC_ID().length; i++) {
             SwordBoy_PIC_B[i] = PicLoadUtil.loadBM(res, SwordBoy_PIC_ID()[i]);
-            Log.d("Text",SwordBoy_PIC_ID()[i]+" : "+ SwordBoy_PIC_B[i]);
         }
 
         //法師圖片轉Bitmap
