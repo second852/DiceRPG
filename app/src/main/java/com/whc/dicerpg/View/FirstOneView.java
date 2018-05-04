@@ -3,11 +3,15 @@ package com.whc.dicerpg.View;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLU;
+import android.util.Log;
 import android.view.MotionEvent;
 
 import com.whc.dicerpg.Model.FireAttack;
 import com.whc.dicerpg.Model.MyBody;
+import com.whc.dicerpg.Model.MyEdgeImg;
 import com.whc.dicerpg.Thread.PhysicsThread;
+import com.whc.dicerpg.Util.Box2DUtil;
+
 import org.jbox2d.collision.AABB;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.ContactListener;
@@ -29,7 +33,7 @@ public class FirstOneView extends GLSurfaceView {
     public SceneRenderer mRenderer;//場景渲染器
     public World world;
     public FireAttack FA;
-    public ArrayList<MyBody> bl=new ArrayList<MyBody>();//剛體列表
+    public ArrayList<MyBody> BackGroup=new ArrayList<MyBody>();//背景列表
     public ArrayList<MyBody> b2=new ArrayList<MyBody>();//剛體列表
     public PhysicsThread pt;//物理模擬線程
 
@@ -54,12 +58,10 @@ public class FirstOneView extends GLSurfaceView {
         //背景
         public MyCommonTexture myBj;
         public TextureRectangular trBj;
+        //設置邊界
+        public TextureRectangular trXbj;
 
-        public MyCommonTexture myRo;
-        public TextureRectangular trRo;
-        public MyCommonTexture myMo;
-        public TextureRectangular trMo;
-        public TextureRectangular trXq;
+
 
 
         @Override
@@ -87,7 +89,18 @@ public class FirstOneView extends GLSurfaceView {
 
             //背景
             myBj.drawself(gl, BackGroup_PIC[0], From2DTo3DUtil.point3D(Object_Location[0]), -10f);
-
+            //設定障礙物
+            for(int i=0;i<BackGroup.size();i++)
+            {
+                try
+                {
+                    BackGroup.get(i).drawSelf(gl);
+                }
+                catch(Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }
 
         }
 
@@ -116,6 +129,7 @@ public class FirstOneView extends GLSurfaceView {
             //初始化紋理
             Constant.loadTextureId(gl);
             trBj=new TextureRectangular(Object_Size[0][0],Object_Size[0][1]);
+            trXbj=new TextureRectangular(Object_Size[1][0],Object_Size[1][1]);
             loadGameData();
             initContactListener();
         }
@@ -146,6 +160,63 @@ public class FirstOneView extends GLSurfaceView {
             //創建世界
             world = new World(worldAABB,gravity, doSleep);
             mRenderer.myBj=new MyCommonTexture(mRenderer.trBj);
+
+            //上邊界
+            for (int i=0;i<13;i++)
+            {
+
+                MyEdgeImg myedgetemp= Box2DUtil.createMyEdgeImg
+                        (
+                                LOCATION[currStage][0][0]+64*i,
+                                LOCATION[currStage][0][1],
+                                Object_Size[0][0],
+                                Object_Size[0][1],
+                                IS_MOVE[currStage][0],
+                                world,
+                                mRenderer.trXbj,
+                                BackGroup_PIC[1],
+                                FirstOneView.this
+                        );
+                BackGroup.add(myedgetemp);
+            }
+            //左邊界
+            for (int i=1;i<7;i++)
+            {
+                MyEdgeImg myedgetemp= Box2DUtil.createMyEdgeImg
+                        (
+                                LOCATION[currStage][0][0],
+                                LOCATION[currStage][0][1]+64*i,
+                                Object_Size[0][0],
+                                Object_Size[0][1],
+                                IS_MOVE[currStage][0],
+                                world,
+                                mRenderer.trXbj,
+                                BackGroup_PIC[1],
+                                FirstOneView.this
+                        );
+                BackGroup.add(myedgetemp);
+            }
+            //下邊界
+            for (int i=1;i<13;i++)
+            {
+                MyEdgeImg myedgetemp= Box2DUtil.createMyEdgeImg
+                        (
+                                LOCATION[currStage][0][0]+64*i,
+                                LOCATION[currStage][1][1],
+                                Object_Size[0][0],
+                                Object_Size[0][1],
+                                IS_MOVE[currStage][0],
+                                world,
+                                mRenderer.trXbj,
+                                BackGroup_PIC[1],
+                                FirstOneView.this
+                        );
+                BackGroup.add(myedgetemp);
+            }
+
+
+
+
         }
 
         //加載碰撞監聽器

@@ -57,7 +57,7 @@ public class Constant {
     public static int Dragon_PIC[];       //背景紋理ID數組
     public static Bitmap[] Dragon_PIC_B;  //背景圖片數組
 
-
+    public static int currStage=0;//當前關卡 0-第一關
 
     //根據自適應屏幕參數對觸摸按鈕範圍變換
     public static void scaleCL()
@@ -66,6 +66,28 @@ public class Constant {
         ssr=ScreenScaleUtil.calScale(SCREEN_WIDTH, SCREEN_HEIGHT);
         XSFLAG=true;
     }
+
+
+    public static boolean[][] IS_MOVE=
+            {
+                    {//第一關的是否靜止列表
+                            true,true,true,														  //左右下方邊界
+                            true,true,true,true,true,true,true,true,true,true,					  //八個擋板
+                            true,true,true,true,true,true,true,true,true,true,true,true,true,true,//第一排釘子
+                            true,true,true,true,true,true,true,true,true,true,true,true,true,true,//第二排釘子
+                            true,true,true,true,true,true,true,true,true,true,true,true,true,true,//第三排釘子
+                            true,true,true,true,true,true,true,true,true,true,true,true,true,true //第四排釘子
+                    }
+            };
+
+
+    //貼圖物體的初始位置
+    public static float[][][] LOCATION=
+            {
+                    {//第一關貼圖物體的初始位置
+                            {32,32},{96,416}//上下左右方邊界
+                    }
+            };
 
 
 
@@ -256,7 +278,7 @@ public class Constant {
 
     //Dragon的圖片ID
     public static String[] Dragon_PIC_ID() {
-        int length=12;
+        int length=10;
         String[] s = new String[length];
         for (int i = 0; i < length; i++) {
             s[i] = "Dragon" + i + ".png";
@@ -265,7 +287,8 @@ public class Constant {
     }
 
     public static float[][] Object_Size={
-            {800,420}//背景
+            {800,400},//背景
+            {64,64}
 
     };
 
