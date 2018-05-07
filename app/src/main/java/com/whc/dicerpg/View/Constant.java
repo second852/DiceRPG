@@ -56,6 +56,9 @@ public class Constant {
     //Dragon
     public static int Dragon_PIC[];       //背景紋理ID數組
     public static Bitmap[] Dragon_PIC_B;  //背景圖片數組
+    //Treasure
+    public static int Treasure_PIC[];       //背景紋理ID數組
+    public static Bitmap[] Treasure_PIC_B;  //背景圖片數組
 
     public static int currStage=0;//當前關卡 0-第一關
 
@@ -66,30 +69,6 @@ public class Constant {
         ssr=ScreenScaleUtil.calScale(SCREEN_WIDTH, SCREEN_HEIGHT);
         XSFLAG=true;
     }
-
-
-    public static boolean[][] IS_MOVE=
-            {
-                    {//第一關的是否靜止列表
-                            true,true,true,														  //左右下方邊界
-                            true,true,true,true,true,true,true,true,true,true,					  //八個擋板
-                            true,true,true,true,true,true,true,true,true,true,true,true,true,true,//第一排釘子
-                            true,true,true,true,true,true,true,true,true,true,true,true,true,true,//第二排釘子
-                            true,true,true,true,true,true,true,true,true,true,true,true,true,true,//第三排釘子
-                            true,true,true,true,true,true,true,true,true,true,true,true,true,true //第四排釘子
-                    }
-            };
-
-
-    //貼圖物體的初始位置
-    public static float[][][] LOCATION=
-            {
-                    {//第一關貼圖物體的初始位置
-                            {32,32},{96,416}//上下左右方邊界
-                    }
-            };
-
-
 
     //加載紋理ID
     public static void loadTextureId(GL10 gl) {
@@ -132,6 +111,11 @@ public class Constant {
         Dragon_PIC=new int[Dragon_PIC_ID().length];
         for (int i = 0; i < Dragon_PIC_ID().length; i++) {
             Dragon_PIC[i] = initTexture(gl, Dragon_PIC_B[i]);
+        }
+        //Treasure Bitmap轉成紋理ID
+        Treasure_PIC=new int[Treasure_PIC_ID().length];
+        for (int i = 0; i < Treasure_PIC_ID().length; i++) {
+            Treasure_PIC[i] = initTexture(gl, Treasure_PIC_B[i]);
         }
 
     }
@@ -179,6 +163,11 @@ public class Constant {
         Dragon_PIC_B=new Bitmap[Dragon_PIC_ID().length];
         for (int i = 0; i < Dragon_PIC_ID().length; i++) {
             Dragon_PIC_B[i] = PicLoadUtil.loadBM(res, Dragon_PIC_ID()[i]);
+        }
+        //Treasure圖片轉Bitmap
+        Treasure_PIC_B=new Bitmap[Treasure_PIC_ID().length];
+        for (int i = 0; i < Treasure_PIC_ID().length; i++) {
+            Treasure_PIC_B[i] = PicLoadUtil.loadBM(res, Treasure_PIC_ID()[i]);
         }
 
     }
@@ -286,16 +275,57 @@ public class Constant {
         return s;
     }
 
+    //Dragon的圖片ID
+    public static String[] Treasure_PIC_ID() {
+        int length=4;
+        String[] s = new String[length];
+        for (int i = 0; i < length; i++) {
+            s[i] = "Treasure" + i + ".png";
+        }
+        return s;
+    }
+
     public static float[][] Object_Size={
-            {800,400},//背景
-            {64,64}
+            {800,480},//背景
+            {64,64},//邊界
+            {64,64},//門
+            {32,32}//障礙物
 
     };
 
 
     public static float[][] Object_Location={
-            {400,200}//背景
+            {400,240},//背景
+
 
     };
+
+    //貼圖物體的初始位置
+    public static float[][][] LOCATION=
+            {
+                    {//第一關貼圖物體的初始位置
+                             {48,48},{752,432}//0,1上下左右方邊界
+                            ,{752,367},{48,112}//2,3右門,左門
+                            ,{48,320},{48,352}//4,5下障礙物
+                            ,{752,176}//6中間障礙物
+                            ,{48,352},{}//7,8寶箱位置
+                    }
+            };
+
+
+    public static boolean[][] IS_MOVE=
+            {
+                    {//第一關的是否靜止列表
+                            true,true,true,														  //左右下方邊界
+                            true,true,true,true,true,true,true,true,true,true,					  //八個擋板
+                            true,true,true,true,true,true,true,true,true,true,true,true,true,true,//第一排釘子
+                            true,true,true,true,true,true,true,true,true,true,true,true,true,true,//第二排釘子
+                            true,true,true,true,true,true,true,true,true,true,true,true,true,true,//第三排釘子
+                            true,true,true,true,true,true,true,true,true,true,true,true,true,true //第四排釘子
+                    }
+            };
+
+
+
 
 }
