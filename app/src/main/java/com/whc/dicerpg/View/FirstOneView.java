@@ -64,8 +64,9 @@ public class FirstOneView extends GLSurfaceView {
         public TextureRectangular trXbj;
         //右左門
         public TextureRectangular trDoor;
-        //設置邊界
-        public TextureRectangular trBarrier;
+        //寶相
+        public TextureRectangular trTreasure;
+
 
 
         @Override
@@ -129,7 +130,7 @@ public class FirstOneView extends GLSurfaceView {
             trBj = new TextureRectangular(Object_Size[0][0], Object_Size[0][1]);
             trXbj = new TextureRectangular(Object_Size[1][0], Object_Size[1][1]);
             trDoor = new TextureRectangular(Object_Size[2][0], Object_Size[2][1]);
-            trBarrier = new TextureRectangular(Object_Size[3][0], Object_Size[3][1]);
+            trTreasure=new TextureRectangular(Object_Size[1][0], Object_Size[1][1]);
             loadGameData();
             initContactListener();
         }
@@ -202,19 +203,30 @@ public class FirstOneView extends GLSurfaceView {
     //設置寶箱
     public void Treasure()
     {
-        Treasure treasure=Box2DUtil.createTreasure(
-                LOCATION[currStage][2][0],
-                LOCATION[currStage][2][1],
-                Object_Size[2][0],
-                Object_Size[2][1],
+        Treasure treasure1=Box2DUtil.createTreasure(
+                LOCATION[currStage][7][0],
+                LOCATION[currStage][7][1],
+                Object_Size[1][0],
+                Object_Size[1][1],
                 IS_MOVE[currStage][0],
                 world,
-                mRenderer.trDoor,
-                Door_PIC[0],
+                mRenderer.trTreasure,
+                Treasure_PIC[0],
                 FirstOneView.this
         );
-        BackGroup.add(treasure);
-
+        BackGroup.add(treasure1);
+        Treasure treasure2=Box2DUtil.createTreasure(
+                LOCATION[currStage][8][0],
+                LOCATION[currStage][8][1],
+                Object_Size[1][0],
+                Object_Size[1][1],
+                IS_MOVE[currStage][0],
+                world,
+                mRenderer.trTreasure,
+                Treasure_PIC[0],
+                FirstOneView.this
+        );
+        BackGroup.add(treasure2);
     }
 
 
@@ -257,11 +269,11 @@ public class FirstOneView extends GLSurfaceView {
                     (
                             LOCATION[currStage][4][0] + 32 * i,
                             LOCATION[currStage][4][1],
-                            Object_Size[3][0],
-                            Object_Size[3][1],
+                            Object_Size[1][0],
+                            Object_Size[1][1],
                             IS_MOVE[currStage][0],
                             world,
-                            mRenderer.trBarrier,
+                            mRenderer.trXbj,
                             BackGroup_PIC[1],
                             FirstOneView.this
                     );
@@ -272,11 +284,11 @@ public class FirstOneView extends GLSurfaceView {
                     (
                             LOCATION[currStage][5][0] + 32 * i,
                             LOCATION[currStage][5][1],
-                            Object_Size[3][0],
-                            Object_Size[3][1],
+                            Object_Size[1][0],
+                            Object_Size[1][1],
                             IS_MOVE[currStage][0],
                             world,
-                            mRenderer.trBarrier,
+                            mRenderer.trXbj,
                             BackGroup_PIC[1],
                             FirstOneView.this
                     );
@@ -284,11 +296,11 @@ public class FirstOneView extends GLSurfaceView {
                     (
                             LOCATION[currStage][5][0] + 32 * (i + 1),
                             LOCATION[currStage][5][1],
-                            Object_Size[3][0],
-                            Object_Size[3][1],
+                            Object_Size[1][0],
+                            Object_Size[1][1],
                             IS_MOVE[currStage][0],
                             world,
-                            mRenderer.trBarrier,
+                            mRenderer.trXbj,
                             BackGroup_PIC[1],
                             FirstOneView.this
                     );
@@ -296,12 +308,12 @@ public class FirstOneView extends GLSurfaceView {
             BackGroup.add(myedgetemp2);
         }
         //中間障礙物
-        for (int j = 0; j < 2; j++) {
-            for (int i = 1; i < 10; i++) {
+        for (int j = 1; j <5; j++) {
+            for (int i = 1; i <20; i++) {
                 MyEdgeImg myedgetemp = Box2DUtil.createMyEdgeImg
                         (
-                                LOCATION[currStage][6][0] - 64 * (i),
-                                LOCATION[currStage][6][1]+64*j,
+                                LOCATION[currStage][6][0]-32 * (i),
+                                LOCATION[currStage][6][1]+32*j,
                                 Object_Size[1][0],
                                 Object_Size[1][1],
                                 IS_MOVE[currStage][0],
@@ -313,33 +325,16 @@ public class FirstOneView extends GLSurfaceView {
                 BackGroup.add(myedgetemp);
             }
         }
-        for (int i = 1; i <19; i++) {
-            MyEdgeImg myedgetemp = Box2DUtil.createMyEdgeImg
-                    (
-                            LOCATION[currStage][6][0] - 32 * (i),
-                            LOCATION[currStage][6][1]-48,
-                            Object_Size[1][0],
-                            Object_Size[1][1],
-                            IS_MOVE[currStage][0],
-                            world,
-                            mRenderer.trBarrier,
-                            BackGroup_PIC[1],
-                            FirstOneView.this
-                    );
-            BackGroup.add(myedgetemp);
-        }
-
-
     }
 
 
     //設置邊界
     public void Edge() {
         //上邊界
-        for (int i = 0; i < 12; i++) {
+        for (int i = 0; i < 23; i++) {
             MyEdgeImg myedgetemp = Box2DUtil.createMyEdgeImg
                     (
-                            LOCATION[currStage][0][0] + 64 * i,
+                            LOCATION[currStage][0][0] + 32 * i,
                             LOCATION[currStage][0][1],
                             Object_Size[1][0],
                             Object_Size[1][1],
@@ -352,11 +347,11 @@ public class FirstOneView extends GLSurfaceView {
             BackGroup.add(myedgetemp);
         }
         //左邊界
-        for (int i = 2; i < 7; i++) {
+        for (int i = 3; i < 12; i++) {
             MyEdgeImg myedgetemp = Box2DUtil.createMyEdgeImg
                     (
                             LOCATION[currStage][0][0],
-                            LOCATION[currStage][0][1] + 64 * i,
+                            LOCATION[currStage][0][1] + 32 * i,
                             Object_Size[1][0],
                             Object_Size[1][1],
                             IS_MOVE[currStage][0],
@@ -368,10 +363,10 @@ public class FirstOneView extends GLSurfaceView {
             BackGroup.add(myedgetemp);
         }
         //下邊界
-        for (int i = 1; i < 12; i++) {
+        for (int i = 1; i < 23; i++) {
             MyEdgeImg myedgetemp = Box2DUtil.createMyEdgeImg
                     (
-                            LOCATION[currStage][0][0] + 64 * i,
+                            LOCATION[currStage][0][0] + 32 * i,
                             LOCATION[currStage][1][1],
                             Object_Size[1][0],
                             Object_Size[1][1],
@@ -384,11 +379,11 @@ public class FirstOneView extends GLSurfaceView {
             BackGroup.add(myedgetemp);
         }
         //右邊界
-        for (int i = 1; i < 5; i++) {
+        for (int i = 1; i <9; i++) {
             MyEdgeImg myedgetemp = Box2DUtil.createMyEdgeImg
                     (
                             LOCATION[currStage][1][0],
-                            LOCATION[currStage][0][1] + 64 * i,
+                            LOCATION[currStage][0][1] + 32 * i,
                             Object_Size[1][0],
                             Object_Size[1][1],
                             IS_MOVE[currStage][0],
