@@ -22,6 +22,7 @@ public class Constant {
     public static int SCREEN_HEIGHT; //屏幕高度
     public static float RATIO = SCREEN_WIDTH_STANDARD / SCREEN_HEIGHT_STANDARD;//屏幕寬高比
 
+    public static boolean StoneMove=true;
 
     public static boolean PHYSICS_THREAD_FLAG = true;//物理模擬線程工作標誌位
     public static final float TIME_STEP = 2f / 60.0f;//模擬的的頻率
@@ -288,7 +289,7 @@ public class Constant {
     public static float[][] Object_Size={
             {800,480},//背景
             {32,32},//邊界
-            {64,64},//門
+            {64,64}//門
     };
 
 
@@ -306,7 +307,8 @@ public class Constant {
                             ,{752,352},{48,96}//2,3右門,左門
                             ,{48,304},{48,336}//4,5下障礙物
                             ,{752,112}//6中間障礙物
-                            ,{90,365},{704,96}//7,8寶箱位置
+                            ,{90,365},{704,96}//7,8左右寶箱位置
+                            ,{138,360}//9石頭
                     }
             };
 

@@ -10,8 +10,10 @@ import com.whc.dicerpg.Model.Door;
 import com.whc.dicerpg.Model.FireAttack;
 import com.whc.dicerpg.Model.MyBody;
 import com.whc.dicerpg.Model.MyEdgeImg;
+import com.whc.dicerpg.Model.Stone;
 import com.whc.dicerpg.Model.Treasure;
 import com.whc.dicerpg.Thread.PhysicsThread;
+import com.whc.dicerpg.Thread.StoneTread;
 import com.whc.dicerpg.Util.Box2DUtil;
 
 import org.jbox2d.collision.AABB;
@@ -38,7 +40,11 @@ public class FirstOneView extends GLSurfaceView {
     public FireAttack FA;
     public ArrayList<MyBody> BackGroup = new ArrayList<MyBody>();//背景列表
     public ArrayList<MyBody> b2 = new ArrayList<MyBody>();//剛體列表
+    public float StoneX=128;
+    public float StoneY=368;
     public PhysicsThread pt;//物理模擬線程
+    public StoneTread stoneTread;
+    public boolean addStone=true;
 
 
     public FirstOneView(Context context) {
@@ -66,6 +72,8 @@ public class FirstOneView extends GLSurfaceView {
         public TextureRectangular trDoor;
         //寶相
         public TextureRectangular trTreasure;
+        //石頭
+        public TextureRectangular trStone;
 
 
 
@@ -91,6 +99,7 @@ public class FirstOneView extends GLSurfaceView {
                             1,
                             0
                     );
+            //背景
             myBj.drawself(gl, BackGroup_PIC[0], From2DTo3DUtil.point3D(Object_Location[0]), -10f);
             //設定障礙物
             for (int i = 0; i < BackGroup.size(); i++) {
@@ -131,8 +140,10 @@ public class FirstOneView extends GLSurfaceView {
             trXbj = new TextureRectangular(Object_Size[1][0], Object_Size[1][1]);
             trDoor = new TextureRectangular(Object_Size[2][0], Object_Size[2][1]);
             trTreasure=new TextureRectangular(Object_Size[1][0], Object_Size[1][1]);
+            trStone =new TextureRectangular(Object_Size[1][0], Object_Size[1][1]);
             loadGameData();
             initContactListener();
+            initThread();
         }
 
         @Override
@@ -169,10 +180,6 @@ public class FirstOneView extends GLSurfaceView {
             Door();
             //寶相
             Treasure();
-
-
-
-
         }
 
         //加載碰撞監聽器
@@ -200,6 +207,13 @@ public class FirstOneView extends GLSurfaceView {
 
     }
 
+
+
+    private void initThread() {
+          stoneTread=new StoneTread(this);
+          stoneTread.start();
+    }
+
     //設置寶箱
     public void Treasure()
     {
@@ -208,7 +222,6 @@ public class FirstOneView extends GLSurfaceView {
                 LOCATION[currStage][7][1],
                 Object_Size[1][0],
                 Object_Size[1][1],
-                IS_MOVE[currStage][0],
                 world,
                 mRenderer.trTreasure,
                 Treasure_PIC[0],
@@ -220,7 +233,6 @@ public class FirstOneView extends GLSurfaceView {
                 LOCATION[currStage][8][1],
                 Object_Size[1][0],
                 Object_Size[1][1],
-                IS_MOVE[currStage][0],
                 world,
                 mRenderer.trTreasure,
                 Treasure_PIC[0],
@@ -239,10 +251,9 @@ public class FirstOneView extends GLSurfaceView {
                         LOCATION[currStage][2][1],
                         Object_Size[2][0],
                         Object_Size[2][1],
-                        IS_MOVE[currStage][0],
                         world,
                         mRenderer.trDoor,
-                        Door_PIC[0],
+                        Door_PIC[1],
                         FirstOneView.this
                 );
         BackGroup.add(doorR);
@@ -252,7 +263,6 @@ public class FirstOneView extends GLSurfaceView {
                         LOCATION[currStage][3][1],
                         Object_Size[2][0],
                         Object_Size[2][1],
-                        IS_MOVE[currStage][0],
                         world,
                         mRenderer.trDoor,
                         Door_PIC[0],
@@ -271,7 +281,6 @@ public class FirstOneView extends GLSurfaceView {
                             LOCATION[currStage][4][1],
                             Object_Size[1][0],
                             Object_Size[1][1],
-                            IS_MOVE[currStage][0],
                             world,
                             mRenderer.trXbj,
                             BackGroup_PIC[1],
@@ -286,7 +295,6 @@ public class FirstOneView extends GLSurfaceView {
                             LOCATION[currStage][5][1],
                             Object_Size[1][0],
                             Object_Size[1][1],
-                            IS_MOVE[currStage][0],
                             world,
                             mRenderer.trXbj,
                             BackGroup_PIC[1],
@@ -298,7 +306,6 @@ public class FirstOneView extends GLSurfaceView {
                             LOCATION[currStage][5][1],
                             Object_Size[1][0],
                             Object_Size[1][1],
-                            IS_MOVE[currStage][0],
                             world,
                             mRenderer.trXbj,
                             BackGroup_PIC[1],
@@ -316,7 +323,6 @@ public class FirstOneView extends GLSurfaceView {
                                 LOCATION[currStage][6][1]+32*j,
                                 Object_Size[1][0],
                                 Object_Size[1][1],
-                                IS_MOVE[currStage][0],
                                 world,
                                 mRenderer.trXbj,
                                 BackGroup_PIC[1],
@@ -338,7 +344,6 @@ public class FirstOneView extends GLSurfaceView {
                             LOCATION[currStage][0][1],
                             Object_Size[1][0],
                             Object_Size[1][1],
-                            IS_MOVE[currStage][0],
                             world,
                             mRenderer.trXbj,
                             BackGroup_PIC[1],
@@ -354,7 +359,6 @@ public class FirstOneView extends GLSurfaceView {
                             LOCATION[currStage][0][1] + 32 * i,
                             Object_Size[1][0],
                             Object_Size[1][1],
-                            IS_MOVE[currStage][0],
                             world,
                             mRenderer.trXbj,
                             BackGroup_PIC[1],
@@ -370,7 +374,6 @@ public class FirstOneView extends GLSurfaceView {
                             LOCATION[currStage][1][1],
                             Object_Size[1][0],
                             Object_Size[1][1],
-                            IS_MOVE[currStage][0],
                             world,
                             mRenderer.trXbj,
                             BackGroup_PIC[1],
@@ -386,7 +389,6 @@ public class FirstOneView extends GLSurfaceView {
                             LOCATION[currStage][0][1] + 32 * i,
                             Object_Size[1][0],
                             Object_Size[1][1],
-                            IS_MOVE[currStage][0],
                             world,
                             mRenderer.trXbj,
                             BackGroup_PIC[1],
