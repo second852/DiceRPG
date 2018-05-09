@@ -115,10 +115,10 @@ public class PhysicsTread extends Thread {
             ghost.setTextureid(Ghost_PIC[0]);
             ghost.body.allowSleeping(true);
         }
-//        if(ghost.getTextureid()==Ghost_PIC[0])
-//        {
-//            i++;
-//        }
+        if(ghost.body.isSleeping())
+        {
+            i++;
+        }
 //        if(i>3&&ghost.body.getPosition().x<200)
 //        {
 //            ghost.setTextureid(Ghost_PIC[2]);
