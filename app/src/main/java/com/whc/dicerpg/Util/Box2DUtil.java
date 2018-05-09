@@ -5,6 +5,7 @@ import android.opengl.GLSurfaceView;
 import com.whc.dicerpg.Model.Door;
 import com.whc.dicerpg.Model.FireAttack;
 import com.whc.dicerpg.Model.Dragon;
+import com.whc.dicerpg.Model.Ghost;
 import com.whc.dicerpg.Model.MyEdgeImg;
 import com.whc.dicerpg.Model.Stone;
 import com.whc.dicerpg.Model.Treasure;
@@ -144,13 +145,48 @@ public class Box2DUtil {
         bodyDef.position.set(x/RATE, y/RATE);
         //在世界中創建剛體
         Body bodyTemp = world.createBody(bodyDef);
-        //設為子彈類
-        bodyTemp.setBullet(true);
+//        //設為子彈類
+        bodyTemp.setBullet(false);
         //指定剛體形狀
         bodyTemp.createShape(shape);
         bodyTemp.setMassFromShapes();
         return new Stone(bodyTemp,radius,textureid,tr,gv);
     }
+
+
+    //石頭
+    public static Ghost createGhost
+    (
+            float x,//x坐標
+            float y,//y坐標
+            float width,//寬
+            float height,//高
+            World world,//世界
+            TextureRectangular tr,
+            int textureid,
+            GLSurfaceView gv
+    )
+    {
+        //創建多邊形描述對象
+        PolygonDef shape = new PolygonDef();
+        //設置摩擦係數
+        shape.friction = 0.1f;
+        //設置密度
+        shape.density = 2.0f;
+        //設置能量損失率（反彈）
+        shape.setAsBox(width/2/RATE, height/2/RATE);
+        //創建剛體描述對象
+        BodyDef bodyDef = new BodyDef();
+        //設置位置
+        bodyDef.position.set(x/RATE, y/RATE);
+        //在世界中創建剛體
+        Body bodyTemp= world.createBody(bodyDef);
+        //指定剛體形狀
+        bodyTemp.createShape(shape);
+        bodyTemp.setMassFromShapes();
+        return new Ghost(bodyTemp,width,height,textureid,tr,gv);
+    }
+
     //Fire Create
     public  static  FireAttack createFireAttack
             (

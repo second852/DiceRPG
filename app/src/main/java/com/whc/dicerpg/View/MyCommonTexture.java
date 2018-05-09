@@ -15,10 +15,8 @@ public class MyCommonTexture
 	public void drawself(GL10 gl, int textureId, float[] point, float z)
 	{
 		gl.glPushMatrix();
-		
 		gl.glTranslatef(point[0], point[1], 0);
 		tr.drawSelf(gl, textureId, z);
-		
 		gl.glPopMatrix();
 	}
 }

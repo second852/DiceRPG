@@ -2,6 +2,9 @@ package com.whc.dicerpg.View;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.RectF;
 import android.opengl.GLUtils;
 import android.util.Log;
 
@@ -22,7 +25,8 @@ public class Constant {
     public static int SCREEN_HEIGHT; //屏幕高度
     public static float RATIO = SCREEN_WIDTH_STANDARD / SCREEN_HEIGHT_STANDARD;//屏幕寬高比
 
-    public static boolean StoneMove=true;
+    public static boolean StoneMove =true;
+    public static boolean GhostMove =true;
 
     public static boolean PHYSICS_THREAD_FLAG = true;//物理模擬線程工作標誌位
     public static final float TIME_STEP = 2f / 60.0f;//模擬的的頻率
@@ -89,9 +93,9 @@ public class Constant {
             Stone_PIC[i] = initTexture(gl, Stone_PIC_B[i]);
         }
         //刺Bitmap轉成紋理ID
-        Prick_PIC=new int[Stone_PIC_ID().length];
-        for (int i = 0; i < Stone_PIC_ID().length; i++) {
-            Prick_PIC[i] = initTexture(gl, Prick_PIC_B[i]);
+        Prick_PIC=new int[Prick_PIC_ID().length];
+        for (int i = 0; i < Prick_PIC_ID().length; i++) {
+            Prick_PIC[i] = initTexture(gl,Prick_PIC_B[i]);
         }
         //門Bitmap轉成紋理ID
         Door_PIC=new int[Door_PIC_ID().length];
@@ -142,9 +146,12 @@ public class Constant {
         }
         //刺圖片轉Bitmap
         Prick_PIC_B=new Bitmap[Prick_PIC_ID().length];
+        Bitmap c = PicLoadUtil.loadBM(res, Prick_PIC_ID()[4]);
         for (int i = 0; i < Prick_PIC_ID().length; i++) {
-            Prick_PIC_B[i] = PicLoadUtil.loadBM(res, Prick_PIC_ID()[i]);
+            Bitmap s = PicLoadUtil.loadBM(res, Prick_PIC_ID()[i]);
+            Prick_PIC_B[i]=combineImages(c,s);
         }
+
         //門圖片轉Bitmap
         Door_PIC_B=new Bitmap[Door_PIC_ID().length];
         for (int i = 0; i < Door_PIC_ID().length; i++) {
@@ -231,7 +238,7 @@ public class Constant {
     }
     //刺圖片ID
     public static String[] Prick_PIC_ID() {
-        int length=4;
+        int length=5;
         String[] s = new String[length];
         for (int i = 0; i < length; i++) {
             s[i] = "Prick" + i + ".png";
@@ -309,6 +316,8 @@ public class Constant {
                             ,{752,112}//6中間障礙物
                             ,{90,365},{704,96}//7,8左右寶箱位置
                             ,{138,360}//9石頭
+                            ,{576,96},{480,96},{384,96},{288,96},{192,96}//10,11,12,13,14刺
+                            ,{720,272}//15 ghost
                     }
             };
 
@@ -325,7 +334,18 @@ public class Constant {
                     }
             };
 
-
+    public static Bitmap combineImages(Bitmap c, Bitmap s) {
+        int width=s.getWidth(), height = s.getHeight();
+        Bitmap cs= Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas comboImage = new Canvas(cs);
+        Paint paint=new Paint();
+        paint.setAntiAlias(true);
+        paint.setAlpha(168);
+        comboImage.drawBitmap(c, 0f, 0f, paint);
+        paint.setAlpha(220);
+        comboImage.drawBitmap(s, 1f, -1f, paint);
+        return cs;
+    }
 
 
 }

@@ -3,17 +3,15 @@ package com.whc.dicerpg.View;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLU;
-import android.util.Log;
 import android.view.MotionEvent;
 
 import com.whc.dicerpg.Model.Door;
 import com.whc.dicerpg.Model.FireAttack;
 import com.whc.dicerpg.Model.MyBody;
 import com.whc.dicerpg.Model.MyEdgeImg;
-import com.whc.dicerpg.Model.Stone;
 import com.whc.dicerpg.Model.Treasure;
-import com.whc.dicerpg.Thread.PhysicsThread;
-import com.whc.dicerpg.Thread.StoneTread;
+import com.whc.dicerpg.Thread.PrickThread;
+import com.whc.dicerpg.Thread.PhysicsTread;
 import com.whc.dicerpg.Util.Box2DUtil;
 
 import org.jbox2d.collision.AABB;
@@ -38,13 +36,18 @@ public class FirstOneView extends GLSurfaceView {
     public SceneRenderer mRenderer;//場景渲染器
     public World world;
     public FireAttack FA;
+    //鋼體
     public ArrayList<MyBody> BackGroup = new ArrayList<MyBody>();//背景列表
     public ArrayList<MyBody> b2 = new ArrayList<MyBody>();//剛體列表
-    public float StoneX=128;
-    public float StoneY=368;
-    public PhysicsThread pt;//物理模擬線程
-    public StoneTread stoneTread;
+
+    //添加
     public boolean addStone=true;
+    public boolean addGhost=true;
+
+    //Thread
+    public PhysicsTread physicsTread;
+    public PrickThread prickThread;
+    public int PrickStyle=0;
 
 
     public FirstOneView(Context context) {
@@ -74,7 +77,11 @@ public class FirstOneView extends GLSurfaceView {
         public TextureRectangular trTreasure;
         //石頭
         public TextureRectangular trStone;
-
+        //刺
+        public MyCommonTexture myPrick;
+        public TextureRectangular trPrick;
+        //ghost
+        public TextureRectangular trGhost;
 
 
         @Override
@@ -101,6 +108,13 @@ public class FirstOneView extends GLSurfaceView {
                     );
             //背景
             myBj.drawself(gl, BackGroup_PIC[0], From2DTo3DUtil.point3D(Object_Location[0]), -10f);
+            //刺
+            mRenderer.myPrick.drawself(gl,Prick_PIC[PrickStyle], From2DTo3DUtil.point3D(LOCATION[currStage][10]), -5f);
+            mRenderer.myPrick.drawself(gl,Prick_PIC[PrickStyle], From2DTo3DUtil.point3D(LOCATION[currStage][11]), -5f);
+            mRenderer.myPrick.drawself(gl,Prick_PIC[PrickStyle], From2DTo3DUtil.point3D(LOCATION[currStage][12]), -5f);
+            mRenderer.myPrick.drawself(gl,Prick_PIC[PrickStyle], From2DTo3DUtil.point3D(LOCATION[currStage][13]), -5f);
+            mRenderer.myPrick.drawself(gl,Prick_PIC[PrickStyle], From2DTo3DUtil.point3D(LOCATION[currStage][14]), -5f);
+
             //設定障礙物
             for (int i = 0; i < BackGroup.size(); i++) {
                 try {
@@ -141,6 +155,8 @@ public class FirstOneView extends GLSurfaceView {
             trDoor = new TextureRectangular(Object_Size[2][0], Object_Size[2][1]);
             trTreasure=new TextureRectangular(Object_Size[1][0], Object_Size[1][1]);
             trStone =new TextureRectangular(Object_Size[1][0], Object_Size[1][1]);
+            trPrick=new TextureRectangular(Object_Size[1][0], Object_Size[1][1]);
+            trGhost=new TextureRectangular(Object_Size[1][0], Object_Size[1][1]);
             loadGameData();
             initContactListener();
             initThread();
@@ -180,6 +196,9 @@ public class FirstOneView extends GLSurfaceView {
             Door();
             //寶相
             Treasure();
+            //刺
+            myPrick=new MyCommonTexture(mRenderer.trPrick);
+            //ghost
         }
 
         //加載碰撞監聽器
@@ -210,8 +229,10 @@ public class FirstOneView extends GLSurfaceView {
 
 
     private void initThread() {
-          stoneTread=new StoneTread(this);
-          stoneTread.start();
+          physicsTread =new PhysicsTread(this);
+          physicsTread.start();
+          prickThread=new PrickThread(this);
+          prickThread.start();
     }
 
     //設置寶箱
