@@ -2,7 +2,6 @@ package com.whc.dicerpg.Thread;
 
 import android.opengl.GLSurfaceView;
 
-import com.whc.dicerpg.Model.Ghost;
 import com.whc.dicerpg.Model.Stone;
 import com.whc.dicerpg.Util.Box2DUtil;
 import com.whc.dicerpg.View.FirstOneView;
@@ -14,9 +13,9 @@ public class PhysicsTread extends Thread {
 
     GLSurfaceView gv;
     Stone stone;
-    Ghost ghost;
+
     int id;
-    int i;
+
     public PhysicsTread(GLSurfaceView gv)
     {
         this.gv=gv;
@@ -94,43 +93,6 @@ public class PhysicsTread extends Thread {
             fo.world.destroyBody(stone.body);
             fo.addStone=true;
         }
-        //ghost
-        if(fo.addGhost) {
-            ghost = Box2DUtil.createGhost(
-                    LOCATION[currStage][15][0],
-                    LOCATION[currStage][15][1],
-                    Object_Size[1][0],
-                    Object_Size[1][1],
-                    fo.world,
-                    fo.mRenderer.trGhost,
-                    Ghost_PIC[1],
-                    fo
-            );
-            ghost.body.setLinearVelocity(new Vec2(-2, 0));
-            fo.BackGroup.add(ghost);
-            fo.addGhost = false;
-        }
-        if(ghost.body.getLinearVelocity().x==0)
-        {
-            ghost.setTextureid(Ghost_PIC[0]);
-            ghost.body.allowSleeping(true);
-        }
-        if(ghost.body.isSleeping())
-        {
-            i++;
-        }
-//        if(i>3&&ghost.body.getPosition().x<200)
-//        {
-//            ghost.setTextureid(Ghost_PIC[2]);
-//            ghost.body.setLinearVelocity(new Vec2(2,0));
-//            i=0;
-//        }
-//        if(i>10&&ghost.body.getPosition().x>200)
-//        {
-//            ghost.setTextureid(Ghost_PIC[1]);
-//            ghost.body.setLinearVelocity(new Vec2(-2,0));
-//            i=0;
-//        }
 
     }
 

@@ -10,6 +10,8 @@ import com.whc.dicerpg.Model.FireAttack;
 import com.whc.dicerpg.Model.MyBody;
 import com.whc.dicerpg.Model.MyEdgeImg;
 import com.whc.dicerpg.Model.Treasure;
+import com.whc.dicerpg.Thread.DragonThread;
+import com.whc.dicerpg.Thread.GhostThread;
 import com.whc.dicerpg.Thread.PrickThread;
 import com.whc.dicerpg.Thread.PhysicsTread;
 import com.whc.dicerpg.Util.Box2DUtil;
@@ -40,14 +42,26 @@ public class FirstOneView extends GLSurfaceView {
     public ArrayList<MyBody> BackGroup = new ArrayList<MyBody>();//背景列表
     public ArrayList<MyBody> b2 = new ArrayList<MyBody>();//剛體列表
 
-    //添加
+    //Stone
     public boolean addStone=true;
-    public boolean addGhost=true;
-
+    //Prick
+    public int PrickStyle=0;
+    //Ghost
+    public float GhostX= LOCATION[currStage][15][0];
+    public float GhostY=LOCATION[currStage][15][1];
+    public int GhostStyle=0;
+    //Dragon
+    public float DragonX= LOCATION[currStage][16][0];
+    public float DragonY=LOCATION[currStage][16][1];
+    public int DragonStyle=12;
+    public boolean DragonAttack=true;
     //Thread
     public PhysicsTread physicsTread;
     public PrickThread prickThread;
-    public int PrickStyle=0;
+    public GhostThread ghostThread;
+    public DragonThread dragonThread;
+
+
 
 
     public FirstOneView(Context context) {
@@ -81,7 +95,11 @@ public class FirstOneView extends GLSurfaceView {
         public MyCommonTexture myPrick;
         public TextureRectangular trPrick;
         //ghost
+        public MyCommonTexture myGhost;
         public TextureRectangular trGhost;
+        //龍
+        public MyCommonTexture myDragon;
+        public TextureRectangular trDragon;
 
 
         @Override
@@ -114,6 +132,18 @@ public class FirstOneView extends GLSurfaceView {
             mRenderer.myPrick.drawself(gl,Prick_PIC[PrickStyle], From2DTo3DUtil.point3D(LOCATION[currStage][12]), -5f);
             mRenderer.myPrick.drawself(gl,Prick_PIC[PrickStyle], From2DTo3DUtil.point3D(LOCATION[currStage][13]), -5f);
             mRenderer.myPrick.drawself(gl,Prick_PIC[PrickStyle], From2DTo3DUtil.point3D(LOCATION[currStage][14]), -5f);
+            //ghost
+            float[] GhostXY={GhostX,GhostY};
+            myGhost.drawself(gl,Ghost_PIC[GhostStyle], From2DTo3DUtil.point3D(GhostXY), -5f);
+            //Dragon
+            float[] DragonXY={DragonX,DragonY};
+            myDragon.drawself(gl,Dragon_PIC[3],From2DTo3DUtil.point3D(DragonXY), -5f);
+            //Dragon attack
+            if(DragonAttack)
+            {
+                DragonXY= new float[]{DragonX-30, DragonY-2};
+                myDragon.drawself(gl,Dragon_PIC[DragonStyle],From2DTo3DUtil.point3D(DragonXY), -5f);
+            }
 
             //設定障礙物
             for (int i = 0; i < BackGroup.size(); i++) {
@@ -150,13 +180,20 @@ public class FirstOneView extends GLSurfaceView {
             Constant.loadPic(FirstOneView.this.getResources());
             //初始化紋理
             Constant.loadTextureId(gl);
+            //背景
             trBj = new TextureRectangular(Object_Size[0][0], Object_Size[0][1]);
-            trXbj = new TextureRectangular(Object_Size[1][0], Object_Size[1][1]);
-            trDoor = new TextureRectangular(Object_Size[2][0], Object_Size[2][1]);
-            trTreasure=new TextureRectangular(Object_Size[1][0], Object_Size[1][1]);
+            mRenderer.myBj = new MyCommonTexture(mRenderer.trBj);
+            //石頭
             trStone =new TextureRectangular(Object_Size[1][0], Object_Size[1][1]);
+            //刺
             trPrick=new TextureRectangular(Object_Size[1][0], Object_Size[1][1]);
+            myPrick=new MyCommonTexture(mRenderer.trPrick);
+            //ghost
             trGhost=new TextureRectangular(Object_Size[1][0], Object_Size[1][1]);
+            mRenderer.myGhost=new MyCommonTexture(mRenderer.trGhost);
+            //Dragon
+            trDragon=new TextureRectangular(Object_Size[1][0], Object_Size[1][1]);
+            mRenderer.myDragon=new MyCommonTexture(mRenderer.trDragon);
             loadGameData();
             initContactListener();
             initThread();
@@ -186,8 +223,6 @@ public class FirstOneView extends GLSurfaceView {
             boolean doSleep = true;
             //創建世界
             world = new World(worldAABB, gravity, doSleep);
-            //背景
-            mRenderer.myBj = new MyCommonTexture(mRenderer.trBj);
             //邊界
             Edge();
             //障礙物
@@ -196,8 +231,7 @@ public class FirstOneView extends GLSurfaceView {
             Door();
             //寶相
             Treasure();
-            //刺
-            myPrick=new MyCommonTexture(mRenderer.trPrick);
+
             //ghost
         }
 
@@ -233,11 +267,16 @@ public class FirstOneView extends GLSurfaceView {
           physicsTread.start();
           prickThread=new PrickThread(this);
           prickThread.start();
+          ghostThread=new GhostThread(this);
+          ghostThread.start();
+          dragonThread=new DragonThread(this);
+          dragonThread.start();
     }
 
     //設置寶箱
     public void Treasure()
     {
+        mRenderer.trTreasure=new TextureRectangular(Object_Size[1][0], Object_Size[1][1]);
         Treasure treasure1=Box2DUtil.createTreasure(
                 LOCATION[currStage][7][0],
                 LOCATION[currStage][7][1],
@@ -266,6 +305,7 @@ public class FirstOneView extends GLSurfaceView {
     //設置門
     public void Door()
     {
+        mRenderer.trDoor = new TextureRectangular(Object_Size[2][0], Object_Size[2][1]);
         Door doorR = Box2DUtil.createDoor
                 (
                         LOCATION[currStage][2][0],
@@ -358,6 +398,7 @@ public class FirstOneView extends GLSurfaceView {
     //設置邊界
     public void Edge() {
         //上邊界
+        mRenderer.trXbj = new TextureRectangular(Object_Size[1][0], Object_Size[1][1]);
         for (int i = 0; i < 23; i++) {
             MyEdgeImg myedgetemp = Box2DUtil.createMyEdgeImg
                     (

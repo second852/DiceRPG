@@ -27,6 +27,7 @@ public class Constant {
 
     public static boolean StoneMove =true;
     public static boolean GhostMove =true;
+    public static boolean DragonMove=true;
 
     public static boolean PHYSICS_THREAD_FLAG = true;//物理模擬線程工作標誌位
     public static final float TIME_STEP = 2f / 60.0f;//模擬的的頻率
@@ -265,7 +266,7 @@ public class Constant {
     }
     //Ghost 的圖片ID
     public static String[] Ghost_PIC_ID() {
-        int length=4;
+        int length=5;
         String[] s = new String[length];
         for (int i = 0; i < length; i++) {
             s[i] = "Ghost" + i + ".png";
@@ -275,7 +276,7 @@ public class Constant {
 
     //Dragon的圖片ID
     public static String[] Dragon_PIC_ID() {
-        int length=10;
+        int length=14;
         String[] s = new String[length];
         for (int i = 0; i < length; i++) {
             s[i] = "Dragon" + i + ".png";
@@ -318,6 +319,7 @@ public class Constant {
                             ,{138,360}//9石頭
                             ,{576,96},{480,96},{384,96},{288,96},{192,96}//10,11,12,13,14刺
                             ,{720,272}//15 ghost
+                            ,{656,96}//16 Dragon
                     }
             };
 
