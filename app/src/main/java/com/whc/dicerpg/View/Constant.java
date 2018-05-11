@@ -3,6 +3,8 @@ package com.whc.dicerpg.View;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.opengl.GLUtils;
@@ -25,9 +27,9 @@ public class Constant {
     public static int SCREEN_HEIGHT; //屏幕高度
     public static float RATIO = SCREEN_WIDTH_STANDARD / SCREEN_HEIGHT_STANDARD;//屏幕寬高比
 
-    public static boolean StoneMove =true;
-    public static boolean GhostMove =true;
-    public static boolean DragonMove=true;
+    public static boolean StoneMove = true;
+    public static boolean GhostMove = true;
+    public static boolean DragonMove = true;
 
     public static boolean PHYSICS_THREAD_FLAG = true;//物理模擬線程工作標誌位
     public static final float TIME_STEP = 2f / 60.0f;//模擬的的頻率
@@ -36,7 +38,7 @@ public class Constant {
 
     //自適應屏幕工具類對象
     public static ScreenScaleResult ssr;
-    public static boolean XSFLAG=false;//運行scaleCL()標誌位
+    public static boolean XSFLAG = false;//運行scaleCL()標誌位
 
     //劍士
     public static int SwordBoy_PIC[];        //劍士紋理ID數組
@@ -65,65 +67,79 @@ public class Constant {
     //Treasure
     public static int Treasure_PIC[];       //背景紋理ID數組
     public static Bitmap[] Treasure_PIC_B;  //背景圖片數組
+    //元素
+    public static int Element_PIC[];       //背景紋理ID數組
+    public static Bitmap[] Element_PIC_B;  //背景圖片數組
+    //Yellw Number
+    public static int NumYL_PIC[];       //背景紋理ID數組
+    public static Bitmap[] NumYL_PIC_B;  //背景圖片數組
 
-    public static int currStage=0;//當前關卡 0-第一關
+    public static int currStage = 0;//當前關卡 0-第一關
 
     //根據自適應屏幕參數對觸摸按鈕範圍變換
-    public static void scaleCL()
-    {
-        if(XSFLAG) return;
-        ssr=ScreenScaleUtil.calScale(SCREEN_WIDTH, SCREEN_HEIGHT);
-        XSFLAG=true;
+    public static void scaleCL() {
+        if (XSFLAG) return;
+        ssr = ScreenScaleUtil.calScale(SCREEN_WIDTH, SCREEN_HEIGHT);
+        XSFLAG = true;
     }
 
     //加載紋理ID
     public static void loadTextureId(GL10 gl) {
         //劍士Bitmap轉成紋理ID
-        SwordBoy_PIC=new int[SwordBoy_PIC_ID().length];
+        SwordBoy_PIC = new int[SwordBoy_PIC_ID().length];
         for (int i = 0; i < SwordBoy_PIC_ID().length; i++) {
             SwordBoy_PIC[i] = initTexture(gl, SwordBoy_PIC_B[i]);
         }
         //法師Bitmap轉成紋理ID
-        MagicGril_PIC=new int[SwordBoy_PIC_ID().length];
+        MagicGril_PIC = new int[SwordBoy_PIC_ID().length];
         for (int i = 0; i < SwordBoy_PIC_ID().length; i++) {
             MagicGril_PIC[i] = initTexture(gl, MagicGril_PIC_B[i]);
         }
         //石頭Bitmap轉成紋理ID
-        Stone_PIC=new int[Stone_PIC_ID().length];
+        Stone_PIC = new int[Stone_PIC_ID().length];
         for (int i = 0; i < Stone_PIC_ID().length; i++) {
             Stone_PIC[i] = initTexture(gl, Stone_PIC_B[i]);
         }
         //刺Bitmap轉成紋理ID
-        Prick_PIC=new int[Prick_PIC_ID().length];
+        Prick_PIC = new int[Prick_PIC_ID().length];
         for (int i = 0; i < Prick_PIC_ID().length; i++) {
-            Prick_PIC[i] = initTexture(gl,Prick_PIC_B[i]);
+            Prick_PIC[i] = initTexture(gl, Prick_PIC_B[i]);
         }
         //門Bitmap轉成紋理ID
-        Door_PIC=new int[Door_PIC_ID().length];
+        Door_PIC = new int[Door_PIC_ID().length];
         for (int i = 0; i < Door_PIC_ID().length; i++) {
             Door_PIC[i] = initTexture(gl, Door_PIC_B[i]);
         }
         //背景Bitmap轉成紋理ID
-        BackGroup_PIC=new int[BackGroup_PIC_ID().length];
+        BackGroup_PIC = new int[BackGroup_PIC_ID().length];
         for (int i = 0; i < BackGroup_PIC_ID().length; i++) {
             BackGroup_PIC[i] = initTexture(gl, BackGroup_PIC_B[i]);
         }
         //Ghost Bitmap轉成紋理ID
-        Ghost_PIC=new int[Ghost_PIC_ID().length];
+        Ghost_PIC = new int[Ghost_PIC_ID().length];
         for (int i = 0; i < Ghost_PIC_ID().length; i++) {
             Ghost_PIC[i] = initTexture(gl, Ghost_PIC_B[i]);
         }
         //Dragon Bitmap轉成紋理ID
-        Dragon_PIC=new int[Dragon_PIC_ID().length];
+        Dragon_PIC = new int[Dragon_PIC_ID().length];
         for (int i = 0; i < Dragon_PIC_ID().length; i++) {
             Dragon_PIC[i] = initTexture(gl, Dragon_PIC_B[i]);
         }
         //Treasure Bitmap轉成紋理ID
-        Treasure_PIC=new int[Treasure_PIC_ID().length];
+        Treasure_PIC = new int[Treasure_PIC_ID().length];
         for (int i = 0; i < Treasure_PIC_ID().length; i++) {
             Treasure_PIC[i] = initTexture(gl, Treasure_PIC_B[i]);
         }
-
+        //Element
+        Element_PIC = new int[Element_PIC_ID().length];
+        for (int i = 0; i < Element_PIC_ID().length; i++) {
+            Element_PIC[i] = initTexture(gl, Element_PIC_B[i]);
+        }
+        //Number Yellow
+        NumYL_PIC = new int[NumYL_PIC_ID().length];
+        for (int i = 0; i < NumYL_PIC_ID().length; i++) {
+            NumYL_PIC[i] = initTexture(gl, DrawNumber(String.valueOf(i),Color.BLACK));
+        }
     }
 
 
@@ -136,48 +152,75 @@ public class Constant {
         }
 
         //法師圖片轉Bitmap
-        MagicGril_PIC_B=new Bitmap[MagicGirl_PIC_ID().length];
+        MagicGril_PIC_B = new Bitmap[MagicGirl_PIC_ID().length];
         for (int i = 0; i < MagicGirl_PIC_ID().length; i++) {
             MagicGril_PIC_B[i] = PicLoadUtil.loadBM(res, MagicGirl_PIC_ID()[i]);
         }
         //石頭圖片轉Bitmap
-        Stone_PIC_B=new Bitmap[Stone_PIC_ID().length];
+        Stone_PIC_B = new Bitmap[Stone_PIC_ID().length];
         for (int i = 0; i < Stone_PIC_ID().length; i++) {
-            Stone_PIC_B[i] = PicLoadUtil.loadBM(res,Stone_PIC_ID()[i]);
+            Stone_PIC_B[i] = PicLoadUtil.loadBM(res, Stone_PIC_ID()[i]);
         }
         //刺圖片轉Bitmap
-        Prick_PIC_B=new Bitmap[Prick_PIC_ID().length];
+        Prick_PIC_B = new Bitmap[Prick_PIC_ID().length];
         Bitmap c = PicLoadUtil.loadBM(res, Prick_PIC_ID()[4]);
         for (int i = 0; i < Prick_PIC_ID().length; i++) {
             Bitmap s = PicLoadUtil.loadBM(res, Prick_PIC_ID()[i]);
-            Prick_PIC_B[i]=combineImages(c,s);
+            Prick_PIC_B[i] = combineImages(c, s);
         }
 
         //門圖片轉Bitmap
-        Door_PIC_B=new Bitmap[Door_PIC_ID().length];
+        Door_PIC_B = new Bitmap[Door_PIC_ID().length];
         for (int i = 0; i < Door_PIC_ID().length; i++) {
             Door_PIC_B[i] = PicLoadUtil.loadBM(res, Door_PIC_ID()[i]);
         }
         //背景圖片轉Bitmap
-        BackGroup_PIC_B=new Bitmap[BackGroup_PIC_ID().length];
+        BackGroup_PIC_B = new Bitmap[BackGroup_PIC_ID().length];
         for (int i = 0; i < BackGroup_PIC_ID().length; i++) {
             BackGroup_PIC_B[i] = PicLoadUtil.loadBM(res, BackGroup_PIC_ID()[i]);
         }
         //Ghost圖片轉Bitmap
-        Ghost_PIC_B=new Bitmap[Ghost_PIC_ID().length];
+        Ghost_PIC_B = new Bitmap[Ghost_PIC_ID().length];
         for (int i = 0; i < Ghost_PIC_ID().length; i++) {
             Ghost_PIC_B[i] = PicLoadUtil.loadBM(res, Ghost_PIC_ID()[i]);
         }
         //Dragon圖片轉Bitmap
-        Dragon_PIC_B=new Bitmap[Dragon_PIC_ID().length];
+        Dragon_PIC_B = new Bitmap[Dragon_PIC_ID().length];
         for (int i = 0; i < Dragon_PIC_ID().length; i++) {
             Dragon_PIC_B[i] = PicLoadUtil.loadBM(res, Dragon_PIC_ID()[i]);
         }
         //Treasure圖片轉Bitmap
-        Treasure_PIC_B=new Bitmap[Treasure_PIC_ID().length];
+        Treasure_PIC_B = new Bitmap[Treasure_PIC_ID().length];
         for (int i = 0; i < Treasure_PIC_ID().length; i++) {
             Treasure_PIC_B[i] = PicLoadUtil.loadBM(res, Treasure_PIC_ID()[i]);
         }
+        //Element圖片轉Bitmap
+        Element_PIC_B = new Bitmap[Element_PIC_ID().length];
+        Bitmap EB = PicLoadUtil.loadBM(res, Element_PIC_ID()[0]);
+        int left, top;
+        for (int i = 0; i < Element_PIC_ID().length; i++) {
+            switch (i) {
+                case 1:
+                    left = 5;
+                    top = 5;
+                    break;
+                case 2:
+                    left = 9;
+                    top = 5;
+                    break;
+                default:
+                    left =5;
+                    top = 5;
+                    break;
+            }
+            Bitmap s = PicLoadUtil.loadBM(res, Element_PIC_ID()[i]);
+            Element_PIC_B[i] = combineElement(EB, s, left, top);
+        }
+        //Number Yellow圖片轉Bitmap
+//        NumYL_PIC_B = new Bitmap[10];
+//        for (int i = 0; i <10; i++) {
+//            NumYL_PIC_B[i] = PicLoadUtil.loadBM(res, DrawNumber(String.valueOf(i), Color.YELLOW));
+//        }
 
     }
 
@@ -212,61 +255,67 @@ public class Constant {
 
     //劍士圖片ID
     public static String[] SwordBoy_PIC_ID() {
-        int length=12;
+        int length = 12;
         String[] s = new String[length];
         for (int i = 0; i < length; i++) {
             s[i] = "SwordBoy" + i + ".png";
         }
         return s;
     }
+
     //法師圖片ID
     public static String[] MagicGirl_PIC_ID() {
-        int length=12;
+        int length = 12;
         String[] s = new String[length];
         for (int i = 0; i < length; i++) {
             s[i] = "MagicGirl" + i + ".png";
         }
         return s;
     }
+
     //石頭圖片ID
     public static String[] Stone_PIC_ID() {
-        int length=4;
+        int length = 4;
         String[] s = new String[length];
         for (int i = 0; i < length; i++) {
             s[i] = "Stone" + i + ".png";
         }
         return s;
     }
+
     //刺圖片ID
     public static String[] Prick_PIC_ID() {
-        int length=5;
+        int length = 5;
         String[] s = new String[length];
         for (int i = 0; i < length; i++) {
             s[i] = "Prick" + i + ".png";
         }
         return s;
     }
+
     //門的圖片ID
     public static String[] Door_PIC_ID() {
-        int length=4;
+        int length = 4;
         String[] s = new String[length];
         for (int i = 0; i < length; i++) {
             s[i] = "Door" + i + ".png";
         }
         return s;
     }
+
     //背景的圖片ID
     public static String[] BackGroup_PIC_ID() {
-        int length=2;
+        int length = 2;
         String[] s = new String[length];
         for (int i = 0; i < length; i++) {
             s[i] = "BackGroup" + i + ".png";
         }
         return s;
     }
+
     //Ghost 的圖片ID
     public static String[] Ghost_PIC_ID() {
-        int length=5;
+        int length = 5;
         String[] s = new String[length];
         for (int i = 0; i < length; i++) {
             s[i] = "Ghost" + i + ".png";
@@ -276,7 +325,7 @@ public class Constant {
 
     //Dragon的圖片ID
     public static String[] Dragon_PIC_ID() {
-        int length=14;
+        int length = 14;
         String[] s = new String[length];
         for (int i = 0; i < length; i++) {
             s[i] = "Dragon" + i + ".png";
@@ -286,7 +335,7 @@ public class Constant {
 
     //Dragon的圖片ID
     public static String[] Treasure_PIC_ID() {
-        int length=4;
+        int length = 4;
         String[] s = new String[length];
         for (int i = 0; i < length; i++) {
             s[i] = "Treasure" + i + ".png";
@@ -294,58 +343,109 @@ public class Constant {
         return s;
     }
 
-    public static float[][] Object_Size={
-            {800,480},//背景
-            {32,32},//邊界
-            {64,64}//門
+    //Element的圖片ID
+    public static String[] Element_PIC_ID() {
+        int length = 3;
+        String[] s = new String[length];
+        for (int i = 0; i < length; i++) {
+            s[i] = "Element" + i + ".png";
+        }
+        return s;
+    }
+
+    //NumYL的圖片ID
+    public static String[] NumYL_PIC_ID() {
+        int length = 10;
+        String[] s = new String[length];
+        for (int i = 0; i < length; i++) {
+            s[i] = "NumYL" + i + ".png";
+        }
+        return s;
+    }
+
+    public static float[][] Object_Size = {
+            {800, 480},//背景
+            {32, 32},//邊界
+            {64, 64},//門
+            {48, 48},//元素
+            {32, 32}//數字
     };
 
 
-    public static float[][] Object_Location={
-            {400,240},//背景
+    public static float[][] Object_Location = {
+            {400, 240},//背景
 
 
     };
 
     //貼圖物體的初始位置
-    public static float[][][] LOCATION=
+    public static float[][][] LOCATION =
             {
                     {//第一關貼圖物體的初始位置
-                             {48,48},{752,400}//0,1上下左右方邊界
-                            ,{752,352},{48,96}//2,3右門,左門
-                            ,{48,304},{48,336}//4,5下障礙物
-                            ,{752,112}//6中間障礙物
-                            ,{90,365},{704,96}//7,8左右寶箱位置
-                            ,{138,360}//9石頭
-                            ,{576,96},{480,96},{384,96},{288,96},{192,96}//10,11,12,13,14刺
-                            ,{720,272}//15 ghost
-                            ,{656,96}//16 Dragon
+                            {48, 48}, {752, 400}//0,1上下左右方邊界
+                            , {752, 352}, {48, 96}//2,3右門,左門
+                            , {48, 304}, {48, 336}//4,5下障礙物
+                            , {752, 112}//6中間障礙物
+                            , {90, 365}, {704, 96}//7,8左右寶箱位置
+                            , {138, 360}//9石頭
+                            , {576, 96}, {480, 96}, {384, 96}, {288, 96}, {192, 96}//10,11,12,13,14刺
+                            , {720, 272}//15 ghost
+                            , {656, 96}//16 Dragon
+                            , {90, 448}, {138, 448}//17 Element-Sun 18Number
+                            , {250, 448}, {298, 448}//19 Element-Fire 20 Number
+
                     }
             };
 
 
-    public static boolean[][] IS_MOVE=
+    public static boolean[][] IS_MOVE =
             {
                     {//第一關的是否靜止列表
-                            true,true,true,														  //左右下方邊界
-                            true,true,true,true,true,true,true,true,true,true,					  //八個擋板
-                            true,true,true,true,true,true,true,true,true,true,true,true,true,true,//第一排釘子
-                            true,true,true,true,true,true,true,true,true,true,true,true,true,true,//第二排釘子
-                            true,true,true,true,true,true,true,true,true,true,true,true,true,true,//第三排釘子
-                            true,true,true,true,true,true,true,true,true,true,true,true,true,true //第四排釘子
+                            true, true, true,                                                          //左右下方邊界
+                            true, true, true, true, true, true, true, true, true, true,                      //八個擋板
+                            true, true, true, true, true, true, true, true, true, true, true, true, true, true,//第一排釘子
+                            true, true, true, true, true, true, true, true, true, true, true, true, true, true,//第二排釘子
+                            true, true, true, true, true, true, true, true, true, true, true, true, true, true,//第三排釘子
+                            true, true, true, true, true, true, true, true, true, true, true, true, true, true //第四排釘子
                     }
             };
 
     public static Bitmap combineImages(Bitmap c, Bitmap s) {
-        int width=s.getWidth(), height = s.getHeight();
-        Bitmap cs= Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        int width = s.getWidth(), height = s.getHeight();
+        Bitmap cs = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         Canvas comboImage = new Canvas(cs);
-        Paint paint=new Paint();
+        Paint paint = new Paint();
         paint.setAntiAlias(true);
         paint.setAlpha(168);
         comboImage.drawBitmap(c, 0f, 0f, paint);
         paint.setAlpha(220);
         comboImage.drawBitmap(s, 1f, -1f, paint);
+        return cs;
+    }
+
+    public static Bitmap combineElement(Bitmap back, Bitmap s, int left, int top) {
+        int width = back.getWidth(), height = back.getHeight();
+        Bitmap cs = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas comboImage = new Canvas(cs);
+        Paint paint = new Paint();
+        paint.setAntiAlias(true);
+        paint.setAlpha(168);
+        comboImage.drawBitmap(back, 0f, 0f, paint);
+        paint.setAlpha(220);
+        comboImage.drawBitmap(s, left, top, paint);
+        return cs;
+    }
+
+    public static Bitmap DrawNumber(String Number, int Color) {
+        int width = 50, height =50;
+        Bitmap cs = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_4444);
+        Canvas canvas = new Canvas(cs);
+        Paint paint = new Paint();
+        paint.setAntiAlias(true);
+        paint.setColor(Color);
+        paint.setStyle(Paint.Style.FILL);
+        paint.setStrokeWidth(1000);
+        canvas.drawText(Number,0,0,paint);
         return cs;
     }
 

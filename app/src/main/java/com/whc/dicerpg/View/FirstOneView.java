@@ -60,6 +60,8 @@ public class FirstOneView extends GLSurfaceView {
     public PrickThread prickThread;
     public GhostThread ghostThread;
     public DragonThread dragonThread;
+    //Element
+    public int SunCount;
 
 
 
@@ -100,7 +102,12 @@ public class FirstOneView extends GLSurfaceView {
         //龍
         public MyCommonTexture myDragon;
         public TextureRectangular trDragon;
-
+        //Element
+        public MyCommonTexture myElement;
+        public TextureRectangular trElement;
+        //Number
+        public MyCommonTexture myNumber;
+        public TextureRectangular trNumber;
 
         @Override
         public void onDrawFrame(GL10 gl) {
@@ -144,6 +151,23 @@ public class FirstOneView extends GLSurfaceView {
                 DragonXY= new float[]{DragonX-30, DragonY-2};
                 myDragon.drawself(gl,Dragon_PIC[DragonStyle],From2DTo3DUtil.point3D(DragonXY), -5f);
             }
+            //Element-Sun
+            float[] ElementSunXY={LOCATION[currStage][17][0],LOCATION[currStage][17][1]};
+            myElement.drawself(gl,Element_PIC[1],From2DTo3DUtil.point3D(ElementSunXY), -5f);
+            float[] ElementElementSunXYCount={LOCATION[currStage][18][0],LOCATION[currStage][18][1]};
+            myNumber.drawself(gl,NumYL_PIC[SunCount%100],From2DTo3DUtil.point3D(ElementElementSunXYCount), -5f);
+            ElementElementSunXYCount=new float[]{LOCATION[currStage][18][0]+Object_Size[4][0],LOCATION[currStage][18][1]};
+            myNumber.drawself(gl,NumYL_PIC[SunCount%10],From2DTo3DUtil.point3D(ElementElementSunXYCount), -5f);
+            //Element-Fire
+            float[] ElementFireXY={LOCATION[currStage][19][0],LOCATION[currStage][19][1]};
+            myElement.drawself(gl,Element_PIC[2],From2DTo3DUtil.point3D(ElementFireXY), -5f);
+            float[] ElementElementFireXYCount={LOCATION[currStage][20][0],LOCATION[currStage][20][1]};
+            myNumber.drawself(gl,NumYL_PIC[SunCount%100],From2DTo3DUtil.point3D(ElementElementFireXYCount), -5f);
+            ElementElementSunXYCount=new float[]{LOCATION[currStage][20][0]+Object_Size[4][0],LOCATION[currStage][20][1]};
+            myNumber.drawself(gl,NumYL_PIC[SunCount%10],From2DTo3DUtil.point3D(ElementElementSunXYCount), -5f);
+
+
+
 
             //設定障礙物
             for (int i = 0; i < BackGroup.size(); i++) {
@@ -194,6 +218,12 @@ public class FirstOneView extends GLSurfaceView {
             //Dragon
             trDragon=new TextureRectangular(Object_Size[1][0], Object_Size[1][1]);
             mRenderer.myDragon=new MyCommonTexture(mRenderer.trDragon);
+            //Element
+            trElement=new TextureRectangular(Object_Size[3][0], Object_Size[3][1]);
+            mRenderer.myElement=new MyCommonTexture(mRenderer.trElement);
+            //Number
+            trNumber=new TextureRectangular(Object_Size[4][0], Object_Size[4][1]);
+            mRenderer.myNumber=new MyCommonTexture(mRenderer.trNumber);
             loadGameData();
             initContactListener();
             initThread();
@@ -231,8 +261,6 @@ public class FirstOneView extends GLSurfaceView {
             Door();
             //寶相
             Treasure();
-
-            //ghost
         }
 
         //加載碰撞監聽器
