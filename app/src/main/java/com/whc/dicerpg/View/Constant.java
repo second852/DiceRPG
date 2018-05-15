@@ -71,8 +71,12 @@ public class Constant {
     public static int Element_PIC[];       //背景紋理ID數組
     public static Bitmap[] Element_PIC_B;  //背景圖片數組
     //Yellw Number
-    public static int NumYL_PIC[];       //背景紋理ID數組
-    public static Bitmap[] NumYL_PIC_B;  //背景圖片數組
+    public static int NumYl_PIC[];       //背景紋理ID數組
+    public static Bitmap[] NumYl_PIC_B;  //背景圖片數組
+    //Red Number
+    public static int NumRd_PIC[];       //背景紋理ID數組
+    public static Bitmap[] NumRd_PIC_B;  //背景圖片數組
+
 
     public static int currStage = 0;//當前關卡 0-第一關
 
@@ -136,9 +140,14 @@ public class Constant {
             Element_PIC[i] = initTexture(gl, Element_PIC_B[i]);
         }
         //Number Yellow
-        NumYL_PIC = new int[NumYL_PIC_ID().length];
-        for (int i = 0; i < NumYL_PIC_ID().length; i++) {
-            NumYL_PIC[i] = initTexture(gl, DrawNumber(String.valueOf(i),Color.BLACK));
+        NumYl_PIC = new int[NumYl_PIC_ID().length];
+        for (int i = 0; i < NumYl_PIC_ID().length; i++) {
+            NumYl_PIC[i] = initTexture(gl,NumYl_PIC_B[i]);
+        }
+        //Number Red
+        NumRd_PIC = new int[NumRd_PIC_ID().length];
+        for (int i = 0; i < NumRd_PIC_ID().length; i++) {
+            NumRd_PIC[i] = initTexture(gl,NumRd_PIC_B[i]);
         }
     }
 
@@ -217,10 +226,15 @@ public class Constant {
             Element_PIC_B[i] = combineElement(EB, s, left, top);
         }
         //Number Yellow圖片轉Bitmap
-//        NumYL_PIC_B = new Bitmap[10];
-//        for (int i = 0; i <10; i++) {
-//            NumYL_PIC_B[i] = PicLoadUtil.loadBM(res, DrawNumber(String.valueOf(i), Color.YELLOW));
-//        }
+        NumYl_PIC_B = new Bitmap[NumYl_PIC_ID().length];
+        for (int i = 0; i <NumYl_PIC_ID().length; i++) {
+            NumYl_PIC_B[i] = PicLoadUtil.loadBM(res, NumYl_PIC_ID()[i]);
+        }
+        //Number Red圖片轉Bitmap
+        NumRd_PIC_B = new Bitmap[NumRd_PIC_ID().length];
+        for (int i = 0; i <NumRd_PIC_ID().length; i++) {
+            NumRd_PIC_B[i] = PicLoadUtil.loadBM(res, NumRd_PIC_ID()[i]);
+        }
 
     }
 
@@ -275,7 +289,7 @@ public class Constant {
 
     //石頭圖片ID
     public static String[] Stone_PIC_ID() {
-        int length = 4;
+        int length = 12;
         String[] s = new String[length];
         for (int i = 0; i < length; i++) {
             s[i] = "Stone" + i + ".png";
@@ -353,12 +367,22 @@ public class Constant {
         return s;
     }
 
-    //NumYL的圖片ID
-    public static String[] NumYL_PIC_ID() {
+    //NumYl的圖片ID
+    public static String[] NumYl_PIC_ID() {
         int length = 10;
         String[] s = new String[length];
         for (int i = 0; i < length; i++) {
-            s[i] = "NumYL" + i + ".png";
+            s[i] = "NumYl" + i + ".png";
+        }
+        return s;
+    }
+
+    //NumRd的圖片ID
+    public static String[] NumRd_PIC_ID() {
+        int length = 10;
+        String[] s = new String[length];
+        for (int i = 0; i < length; i++) {
+            s[i] = "NumRd" + i + ".png";
         }
         return s;
     }
@@ -387,7 +411,7 @@ public class Constant {
                             , {48, 304}, {48, 336}//4,5下障礙物
                             , {752, 112}//6中間障礙物
                             , {90, 365}, {704, 96}//7,8左右寶箱位置
-                            , {138, 360}//9石頭
+                            , {140, 366}//9石頭
                             , {576, 96}, {480, 96}, {384, 96}, {288, 96}, {192, 96}//10,11,12,13,14刺
                             , {720, 272}//15 ghost
                             , {656, 96}//16 Dragon

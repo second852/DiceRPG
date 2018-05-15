@@ -12,6 +12,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 import static com.whc.dicerpg.View.Constant.RATE;
 import static com.whc.dicerpg.View.Constant.Stone_PIC;
+import static com.whc.dicerpg.View.Constant.TIME_STEP;
 
 public class Stone implements MyBody{
 
@@ -29,6 +30,7 @@ public class Stone implements MyBody{
     int textureid;
     TextureRectangular tr;
     GLSurfaceView gv;
+    private static final double DEGREES_TO_RADIANS = (double)(Math.PI/180);
 
     public Stone(Body body, float radius, int textureid, TextureRectangular tr, GLSurfaceView gv) {
         this.body = body;

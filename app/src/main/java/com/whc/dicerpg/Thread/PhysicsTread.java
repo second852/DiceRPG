@@ -58,10 +58,10 @@ public class PhysicsTread extends Thread {
             stone= Box2DUtil.createStone(
                     LOCATION[currStage][9][0],
                     LOCATION[currStage][9][1],
-                    Object_Size[1][0]/2,
+                    15,
                     fo.world,
                     fo.mRenderer.trStone,
-                    Stone_PIC[0],
+                    Stone_PIC[7],
                     fo
             );
             stone.body.setLinearVelocity(new Vec2(3,0));
@@ -70,14 +70,14 @@ public class PhysicsTread extends Thread {
         }
 
         id=stone.getTextureid();
-        if(id==Stone_PIC[0])
+        if(id==Stone_PIC[7])
         {
-            stone.setTextureid(Stone_PIC[1]);
-        }else if(id==Stone_PIC[1])
+            stone.setTextureid(Stone_PIC[8]);
+        }else if(id==Stone_PIC[8])
         {
-            stone.setTextureid(Stone_PIC[2]);
+            stone.setTextureid(Stone_PIC[9]);
         }else {
-            stone.setTextureid(Stone_PIC[0]);
+            stone.setTextureid(Stone_PIC[7]);
         }
 
         if(stone.body.getLinearVelocity().x<=0)

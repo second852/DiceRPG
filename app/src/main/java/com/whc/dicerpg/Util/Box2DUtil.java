@@ -39,7 +39,7 @@ public class Box2DUtil {
         //創建多邊形描述對象
         PolygonDef shape = new PolygonDef();
         //設置摩擦係數
-        shape.friction = 0.1f;
+        shape.friction = 0f;
         //設置密度
         shape.density = 0;
         shape.setAsBox(width/2/RATE, height/2/RATE);
@@ -136,7 +136,7 @@ public class Box2DUtil {
     {
         CircleDef shape = new CircleDef();
         shape.density = 2.0f;
-        shape.friction = 0.1f;
+//        shape.friction = 0.1f;
         //設置半徑
         shape.radius=radius/RATE;
         //創建剛體描述對象
@@ -146,7 +146,7 @@ public class Box2DUtil {
         //在世界中創建剛體
         Body bodyTemp = world.createBody(bodyDef);
 //        //設為子彈類
-        bodyTemp.setBullet(false);
+        bodyTemp.setBullet(true);
         //指定剛體形狀
         bodyTemp.createShape(shape);
         bodyTemp.setMassFromShapes();

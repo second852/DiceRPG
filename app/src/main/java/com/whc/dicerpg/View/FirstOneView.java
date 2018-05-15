@@ -108,6 +108,9 @@ public class FirstOneView extends GLSurfaceView {
         //Number
         public MyCommonTexture myNumber;
         public TextureRectangular trNumber;
+        //HeroFace
+        public MyCommonTexture myHereFace;
+        public TextureRectangular trHereFace;
 
         @Override
         public void onDrawFrame(GL10 gl) {
@@ -155,16 +158,16 @@ public class FirstOneView extends GLSurfaceView {
             float[] ElementSunXY={LOCATION[currStage][17][0],LOCATION[currStage][17][1]};
             myElement.drawself(gl,Element_PIC[1],From2DTo3DUtil.point3D(ElementSunXY), -5f);
             float[] ElementElementSunXYCount={LOCATION[currStage][18][0],LOCATION[currStage][18][1]};
-            myNumber.drawself(gl,NumYL_PIC[SunCount%100],From2DTo3DUtil.point3D(ElementElementSunXYCount), -5f);
-            ElementElementSunXYCount=new float[]{LOCATION[currStage][18][0]+Object_Size[4][0],LOCATION[currStage][18][1]};
-            myNumber.drawself(gl,NumYL_PIC[SunCount%10],From2DTo3DUtil.point3D(ElementElementSunXYCount), -5f);
+            myNumber.drawself(gl,NumYl_PIC[SunCount%100],From2DTo3DUtil.point3D(ElementElementSunXYCount), -5f);
+            ElementElementSunXYCount=new float[]{LOCATION[currStage][18][0]+Object_Size[4][0]+1,LOCATION[currStage][18][1]};
+            myNumber.drawself(gl,NumYl_PIC[SunCount%10],From2DTo3DUtil.point3D(ElementElementSunXYCount), -5f);
             //Element-Fire
             float[] ElementFireXY={LOCATION[currStage][19][0],LOCATION[currStage][19][1]};
             myElement.drawself(gl,Element_PIC[2],From2DTo3DUtil.point3D(ElementFireXY), -5f);
             float[] ElementElementFireXYCount={LOCATION[currStage][20][0],LOCATION[currStage][20][1]};
-            myNumber.drawself(gl,NumYL_PIC[SunCount%100],From2DTo3DUtil.point3D(ElementElementFireXYCount), -5f);
-            ElementElementSunXYCount=new float[]{LOCATION[currStage][20][0]+Object_Size[4][0],LOCATION[currStage][20][1]};
-            myNumber.drawself(gl,NumYL_PIC[SunCount%10],From2DTo3DUtil.point3D(ElementElementSunXYCount), -5f);
+            myNumber.drawself(gl,NumRd_PIC[SunCount%100],From2DTo3DUtil.point3D(ElementElementFireXYCount), -5f);
+            ElementElementSunXYCount=new float[]{LOCATION[currStage][20][0]+Object_Size[4][0]+1,LOCATION[currStage][20][1]};
+            myNumber.drawself(gl,NumRd_PIC[SunCount%10],From2DTo3DUtil.point3D(ElementElementSunXYCount), -5f);
 
 
 
