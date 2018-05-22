@@ -76,7 +76,9 @@ public class Constant {
     //Red Number
     public static int NumRd_PIC[];       //背景紋理ID數組
     public static Bitmap[] NumRd_PIC_B;  //背景圖片數組
-
+    //Red Number
+    public static int HeroFace_PIC[];       //背景紋理ID數組
+    public static Bitmap[] HeroFace_PIC_B;  //背景圖片數組
 
     public static int currStage = 0;//當前關卡 0-第一關
 
@@ -148,6 +150,11 @@ public class Constant {
         NumRd_PIC = new int[NumRd_PIC_ID().length];
         for (int i = 0; i < NumRd_PIC_ID().length; i++) {
             NumRd_PIC[i] = initTexture(gl,NumRd_PIC_B[i]);
+        }
+        //HeroFace 0:boy
+        HeroFace_PIC = new int[HeroFace_PIC_ID().length];
+        for (int i = 0; i < HeroFace_PIC_ID().length; i++) {
+            HeroFace_PIC[i] = initTexture(gl,HeroFace_PIC_B[i]);
         }
     }
 
@@ -234,6 +241,11 @@ public class Constant {
         NumRd_PIC_B = new Bitmap[NumRd_PIC_ID().length];
         for (int i = 0; i <NumRd_PIC_ID().length; i++) {
             NumRd_PIC_B[i] = PicLoadUtil.loadBM(res, NumRd_PIC_ID()[i]);
+        }
+        //HeroFace圖片轉Bitmap
+        HeroFace_PIC_B = new Bitmap[HeroFace_PIC_ID().length];
+        for (int i = 0; i <HeroFace_PIC_ID().length; i++) {
+            HeroFace_PIC_B[i] = PicLoadUtil.loadBM(res,HeroFace_PIC_ID()[i]);
         }
 
     }
@@ -387,17 +399,27 @@ public class Constant {
         return s;
     }
 
+    //HereFace的圖片ID
+    public static String[] HeroFace_PIC_ID() {
+        int length = 1;
+        String[] s = new String[length];
+        for (int i = 0; i < length; i++) {
+            s[i] = "HeroFace" + i + ".png";
+        }
+        return s;
+    }
+
     public static float[][] Object_Size = {
-            {800, 480},//背景
-            {32, 32},//邊界
-            {64, 64},//門
-            {48, 48},//元素
-            {32, 32}//數字
+            {800, 480},//0 背景
+            {32, 32},//1 邊界
+            {64, 64},//2 門
+            {48, 48},//3 元素,HeroFace
+            {32, 32},//4 數字
     };
 
 
     public static float[][] Object_Location = {
-            {400, 240},//背景
+            {400, 240},//0 背景
 
 
     };
@@ -417,6 +439,7 @@ public class Constant {
                             , {656, 96}//16 Dragon
                             , {90, 448}, {138, 448}//17 Element-Sun 18Number
                             , {250, 448}, {298, 448}//19 Element-Fire 20 Number
+                            , {398,448}//21
 
                     }
             };

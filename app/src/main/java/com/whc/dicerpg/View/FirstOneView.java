@@ -168,7 +168,8 @@ public class FirstOneView extends GLSurfaceView {
             myNumber.drawself(gl,NumRd_PIC[SunCount%100],From2DTo3DUtil.point3D(ElementElementFireXYCount), -5f);
             ElementElementSunXYCount=new float[]{LOCATION[currStage][20][0]+Object_Size[4][0]+1,LOCATION[currStage][20][1]};
             myNumber.drawself(gl,NumRd_PIC[SunCount%10],From2DTo3DUtil.point3D(ElementElementSunXYCount), -5f);
-
+            //HeroFace
+            myHereFace.drawself(gl,HeroFace_PIC[0],From2DTo3DUtil.point3D(LOCATION[currStage][21]), -5f);
 
 
 
@@ -227,6 +228,9 @@ public class FirstOneView extends GLSurfaceView {
             //Number
             trNumber=new TextureRectangular(Object_Size[4][0], Object_Size[4][1]);
             mRenderer.myNumber=new MyCommonTexture(mRenderer.trNumber);
+            //HereFace
+            trHereFace=new TextureRectangular(Object_Size[3][0], Object_Size[3][1]);
+            myHereFace=new MyCommonTexture(trHereFace);
             loadGameData();
             initContactListener();
             initThread();
