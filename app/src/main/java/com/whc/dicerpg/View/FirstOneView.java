@@ -62,6 +62,7 @@ public class FirstOneView extends GLSurfaceView {
     public DragonThread dragonThread;
     //Element
     public int SunCount;
+    //Blood
 
 
 

@@ -80,6 +80,11 @@ public class Constant {
     public static int HeroFace_PIC[];       //背景紋理ID數組
     public static Bitmap[] HeroFace_PIC_B;  //背景圖片數組
 
+    //Blood
+    public static int Blood_PIC[];       //背景紋理ID數組
+    public static Bitmap[] Blood_PIC_B;  //背景圖片數組
+
+
     public static int currStage = 0;//當前關卡 0-第一關
 
     //根據自適應屏幕參數對觸摸按鈕範圍變換
@@ -155,6 +160,11 @@ public class Constant {
         HeroFace_PIC = new int[HeroFace_PIC_ID().length];
         for (int i = 0; i < HeroFace_PIC_ID().length; i++) {
             HeroFace_PIC[i] = initTexture(gl,HeroFace_PIC_B[i]);
+        }
+        //Blood 0:boy
+       Blood_PIC = new int[Blood_PIC_ID().length];
+        for (int i = 0; i < Blood_PIC_ID().length; i++) {
+            Blood_PIC[i] = initTexture(gl,Blood_PIC_B[i]);
         }
     }
 
@@ -246,6 +256,11 @@ public class Constant {
         HeroFace_PIC_B = new Bitmap[HeroFace_PIC_ID().length];
         for (int i = 0; i <HeroFace_PIC_ID().length; i++) {
             HeroFace_PIC_B[i] = PicLoadUtil.loadBM(res,HeroFace_PIC_ID()[i]);
+        }
+        //Blood圖片轉Bitmap
+        Blood_PIC_B = new Bitmap[Blood_PIC_ID().length];
+        for (int i = 0; i <Blood_PIC_ID().length; i++) {
+            Blood_PIC_B[i] = PicLoadUtil.loadBM(res,Blood_PIC_ID()[i]);
         }
 
     }
@@ -405,6 +420,16 @@ public class Constant {
         String[] s = new String[length];
         for (int i = 0; i < length; i++) {
             s[i] = "HeroFace" + i + ".png";
+        }
+        return s;
+    }
+
+    //Blood的圖片ID
+    public static String[] Blood_PIC_ID() {
+        int length = 1;
+        String[] s = new String[length];
+        for (int i = 0; i < length; i++) {
+            s[i] = "Blood" + i + ".png";
         }
         return s;
     }
