@@ -76,10 +76,12 @@ public class Constant {
     //Red Number
     public static int NumRd_PIC[];       //背景紋理ID數組
     public static Bitmap[] NumRd_PIC_B;  //背景圖片數組
-    //Red Number
+    //Black Number
+    public static int NumBk_PIC[];       //背景紋理ID數組
+    public static Bitmap[] NumBk_PIC_B;  //背景圖片數組
+    //HeroFace
     public static int HeroFace_PIC[];       //背景紋理ID數組
     public static Bitmap[] HeroFace_PIC_B;  //背景圖片數組
-
     //Blood
     public static int Blood_PIC[];       //背景紋理ID數組
     public static Bitmap[] Blood_PIC_B;  //背景圖片數組
@@ -155,6 +157,11 @@ public class Constant {
         NumRd_PIC = new int[NumRd_PIC_ID().length];
         for (int i = 0; i < NumRd_PIC_ID().length; i++) {
             NumRd_PIC[i] = initTexture(gl,NumRd_PIC_B[i]);
+        }
+        //Number Black
+        NumBk_PIC = new int[NumBk_PIC_ID().length];
+        for (int i = 0; i < NumBk_PIC_ID().length; i++) {
+            NumBk_PIC[i] = initTexture(gl,NumBk_PIC_B[i]);
         }
         //HeroFace 0:boy
         HeroFace_PIC = new int[HeroFace_PIC_ID().length];
@@ -251,6 +258,11 @@ public class Constant {
         NumRd_PIC_B = new Bitmap[NumRd_PIC_ID().length];
         for (int i = 0; i <NumRd_PIC_ID().length; i++) {
             NumRd_PIC_B[i] = PicLoadUtil.loadBM(res, NumRd_PIC_ID()[i]);
+        }
+        //Number Black圖片轉Bitmap
+        NumBk_PIC_B = new Bitmap[NumBk_PIC_ID().length];
+        for (int i = 0; i <NumBk_PIC_ID().length; i++) {
+            NumBk_PIC_B[i] = PicLoadUtil.loadBM(res, NumBk_PIC_ID()[i]);
         }
         //HeroFace圖片轉Bitmap
         HeroFace_PIC_B = new Bitmap[HeroFace_PIC_ID().length];
@@ -414,6 +426,16 @@ public class Constant {
         return s;
     }
 
+    //NumBk的圖片ID
+    public static String[] NumBk_PIC_ID() {
+        int length = 12;
+        String[] s = new String[length];
+        for (int i = 0; i < length; i++) {
+            s[i] = "NumBk" + i + ".png";
+        }
+        return s;
+    }
+
     //HereFace的圖片ID
     public static String[] HeroFace_PIC_ID() {
         int length = 1;
@@ -429,7 +451,7 @@ public class Constant {
         int length = 1;
         String[] s = new String[length];
         for (int i = 0; i < length; i++) {
-            s[i] = "Blood" + i + ".png";
+            s[i] = "Blood" + i + ".jpg";
         }
         return s;
     }
@@ -440,6 +462,8 @@ public class Constant {
             {64, 64},//2 門
             {48, 48},//3 元素,HeroFace
             {32, 32},//4 數字
+            {160,20},//5 blood
+            {16,13}//6 Black Number
     };
 
 
@@ -464,7 +488,9 @@ public class Constant {
                             , {656, 96}//16 Dragon
                             , {90, 448}, {138, 448}//17 Element-Sun 18Number
                             , {250, 448}, {298, 448}//19 Element-Fire 20 Number
-                            , {398,448}//21
+                            , {398,448}//21 Hero
+                            , {520,448}//22 Blood
+                            , {460,448},{480,448},{500,448},{520,448},{540,448},{560,448},{580,448}//23,24,25,26,27,28,29 Blood Number
 
                     }
             };

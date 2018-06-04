@@ -63,7 +63,7 @@ public class FirstOneView extends GLSurfaceView {
     //Element
     public int SunCount;
     //Blood
-
+    public int BloodCount;
 
 
 
@@ -112,6 +112,13 @@ public class FirstOneView extends GLSurfaceView {
         //HeroFace
         public MyCommonTexture myHereFace;
         public TextureRectangular trHereFace;
+        //Blood
+        public MyCommonTexture myBlood;
+        public TextureRectangular trBlood;
+        //Number
+        public MyCommonTexture myBlackNumber;
+        public TextureRectangular trBlackNumber;
+
 
         @Override
         public void onDrawFrame(GL10 gl) {
@@ -171,7 +178,16 @@ public class FirstOneView extends GLSurfaceView {
             myNumber.drawself(gl,NumRd_PIC[SunCount%10],From2DTo3DUtil.point3D(ElementElementSunXYCount), -5f);
             //HeroFace
             myHereFace.drawself(gl,HeroFace_PIC[0],From2DTo3DUtil.point3D(LOCATION[currStage][21]), -5f);
-
+            //Blood
+            myBlood.drawself(gl,Blood_PIC[0],From2DTo3DUtil.point3D(LOCATION[currStage][22]),-5f);
+            //Blood Number
+            myBlackNumber.drawself(gl,NumBk_PIC[BloodCount%1000%100%10],From2DTo3DUtil.point3D(LOCATION[currStage][23]),-3f);
+            myBlackNumber.drawself(gl,NumBk_PIC[BloodCount%100%10],From2DTo3DUtil.point3D(LOCATION[currStage][24]),-3f);
+            myBlackNumber.drawself(gl,NumBk_PIC[BloodCount%10],From2DTo3DUtil.point3D(LOCATION[currStage][25]),-3f);
+            myBlackNumber.drawself(gl,NumBk_PIC[10],From2DTo3DUtil.point3D(LOCATION[currStage][26]),-3f);
+            myBlackNumber.drawself(gl,NumBk_PIC[BloodCount%1000%100%10],From2DTo3DUtil.point3D(LOCATION[currStage][27]),-3f);
+            myBlackNumber.drawself(gl,NumBk_PIC[BloodCount%100%10],From2DTo3DUtil.point3D(LOCATION[currStage][28]),-3f);
+            myBlackNumber.drawself(gl,NumBk_PIC[BloodCount%10],From2DTo3DUtil.point3D(LOCATION[currStage][29]),-3f);
 
 
             //設定障礙物
@@ -232,6 +248,12 @@ public class FirstOneView extends GLSurfaceView {
             //HereFace
             trHereFace=new TextureRectangular(Object_Size[3][0], Object_Size[3][1]);
             myHereFace=new MyCommonTexture(trHereFace);
+            //Blood
+            trBlood=new TextureRectangular(Object_Size[5][0],Object_Size[5][1]);
+            myBlood=new MyCommonTexture(trBlood);
+            //Number
+            trBlackNumber=new TextureRectangular(Object_Size[6][0], Object_Size[6][1]);
+            mRenderer.myBlackNumber=new MyCommonTexture(mRenderer.trBlackNumber);
             loadGameData();
             initContactListener();
             initThread();
