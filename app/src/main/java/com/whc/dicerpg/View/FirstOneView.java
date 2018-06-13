@@ -5,6 +5,7 @@ import android.opengl.GLSurfaceView;
 import android.opengl.GLU;
 import android.view.MotionEvent;
 
+import com.whc.dicerpg.Model.Cube;
 import com.whc.dicerpg.Model.Door;
 import com.whc.dicerpg.Model.FireAttack;
 import com.whc.dicerpg.Model.MyBody;
@@ -64,6 +65,7 @@ public class FirstOneView extends GLSurfaceView {
     public int SunCount;
     //Blood
     public int BloodCount;
+    public Cube cube;
 
 
 
@@ -254,6 +256,9 @@ public class FirstOneView extends GLSurfaceView {
             //Number
             trBlackNumber=new TextureRectangular(Object_Size[6][0], Object_Size[6][1]);
             mRenderer.myBlackNumber=new MyCommonTexture(mRenderer.trBlackNumber);
+            //Dice
+            int[] diceId={Element_PIC[2],Element_PIC[1]};
+            cube=new Cube(FirstOneView.this);
             loadGameData();
             initContactListener();
             initThread();
